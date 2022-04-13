@@ -1,0 +1,47 @@
+language: Python
+
+Ide: Pycharm
+
+
+.
+main.py
+	- model
+		board.py
+		- Pieces
+			- ant.py 	مورچه
+			- bee.py 	زنبور
+			- beetle.py سوسک
+			- locust.py ملخ
+			- spider.py عنکبوت
+		
+	- controller
+		input_controller.py
+		display_controller.py
+		
+	- test
+		free.py
+		model_test.py
+		controller_test.py
+		
+	
+
+
+display and Input format: 
+
+	display format: 
+		mesh_name(1: bee(w)): neighbours(2: locust(w), 4: spider(b), 5: ant(w))
+		mesh_name(2: bee(w)): ...
+		.
+		.
+		.
+		mesh_name(n): ...
+		
+	intput format: 
+	    command(insert/move)	rs(mesh_name)	rd(mesh_name)	
+		
+		
+		
+		
+		
+		
+		
