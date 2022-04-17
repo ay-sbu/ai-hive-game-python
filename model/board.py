@@ -4,6 +4,7 @@ class Board(object):
 
     def __init__(self):
         # the board starts with one row and a column without pieces
+        self.pieces = []
         self.board = [[[]]]
         self.x = 0
         self.y = 0
@@ -50,3 +51,15 @@ class Board(object):
             self.add_row()
         return x, y
 
+
+
+    def insert_piece (self, piece, position):
+        x, y = position
+        self.resize(position)
+        # TODO : check that position is free or piece is beetle
+        self.board[y][x] = self.board[y][x] + [piece]
+        self.pieces.append(piece)
+
+    def piece_in_game(self, piece):
+        """ return True if piece in game """
+        return piece in self.pieces

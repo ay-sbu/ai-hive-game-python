@@ -1,6 +1,57 @@
+from model import pieces
+from model.board import Board
+
+
+# b = Board()
+#
+# b.insert_piece("bQ1", (0, 0))
+# b.insert_piece("wQ1", (1, 4))
+# b.insert_piece("bS2", (0, 5))
+# b.insert_piece("bB1", (10, 8))
+# b.insert_piece("wB1", (10, 8))
+#
+#
+#
+# print(b.pieces)
+
+pieces.can_move("bA1", (6, 5))
 
 
 
+# Simple pygame program
+
+
+# Import the pygame module
+# import pygame
+#
+# # Import pygame.locals for easier access to key coordinates
+# # Updated to conform to flake8 and black standards
+# from pygame.locals import (
+#     K_UP,
+#     K_DOWN,
+#     K_LEFT,
+#     K_RIGHT,
+#     K_ESCAPE,
+#     KEYDOWN,
+#     QUIT,
+# )
+#
+# # Initialize pygame
+# pygame.init()
+#
+#
+# # Define a Player object by extending pygame.sprite.Sprite
+# # The surface drawn on the screen is now an attribute of 'player'
+# class Player(pygame.sprite.Sprite):
+#     def __init__(self):
+#         super(Player, self).__init__()
+#         self.surf = pygame.Surface((75, 25))
+#         self.surf.fill((255, 255, 255))
+#         self.rect = self.surf.get_rect()
+
+
+
+# Import and initialize the pygame library
 # board = [[[]]]
 # board[0][1]=10
 # print (board)
@@ -15,5 +66,5 @@
 #     y += 1
 #     board.insert(0, newRow)
 
-board = [[[12, 14, 2, 6, 0], [2, 3, 4]], [[3, 6], [7, 10]], [0], [6]]
-print(board[0][1][0])
+# board = [[[12, 14, 2, 6, 0], [2, 3, 4]], [[3, 6], [7, 10]], [0], [6]]
+# print(board[0][1][0])
