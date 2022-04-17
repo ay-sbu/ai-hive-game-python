@@ -121,9 +121,7 @@ class GameController:
                 continue
 
             commands = command.split(" ")
-            b.read_command(commands[0],commands[1],commands[2])
-
-            print("After checking :) command sounds ok")
+            print(b.read_command(commands[0],commands[1],commands[2]))
 
             if turn == 1:
                 turn = 0

@@ -5,7 +5,6 @@ class Board(object):
         self.pieces = {}
         self.board = [[[]]]
 
-
     def add_row(self, first=False):
         new_row = []
         row_size = len(self.board[0])
@@ -51,15 +50,44 @@ class Board(object):
             self.add_row()
         return x, y
 
-    def insert_piece(self, piece, position):
-        x,y = self.resize(position)
-        # TODO : check that position is free or piece is beetle
-        self.board[y][x] = self.board[y][x] + [piece]
-        self.pieces[piece] = (x,y)
-
     def piece_in_game(self, piece):
         """ return True if piece in game """
         return piece in self.pieces.keys()
+
+    @staticmethod
+    def around(position):
+        x,y = position
+        around_point = [(x + 1, y), (x - 1, y)]
+        if y % 2 == 0:
+            around_point.append((x,y-1))
+            around_point.append((x,y+1))
+            around_point.append((x-1,y-1))
+            around_point.append((x-1,y+1))
+        else:
+            around_point.append((x, y - 1))
+            around_point.append((x, y + 1))
+            around_point.append((x + 1, y - 1))
+            around_point.append((x + 1, y + 1))
+        return around_point
+
+    def possible_insert(self, piece, position):
+        around_point = self.around(position)
+        color = piece[0]
+        flag = False
+        for point in around_point:
+            x, y = point
+            try:
+                point_near = self.board[y][x][0]
+                if not point_near == []:
+                    if not point_near[0] == color:
+                        return "the piece should not be next to other color"
+                    else:
+                        flag = True
+            except:
+                pass
+        if flag:
+            return "ok"
+        return "the piece should be next to its color"
 
     def give_position(self, direction, piece):
         """ return the position of direction than piece """
@@ -91,11 +119,20 @@ class Board(object):
         position = self.give_position(direction, ref_piece)
         # TODO : check that
 
+    def insert_piece(self, piece, position):
+        flag = self.possible_insert(piece, position)
+        if not flag == "ok":
+            return flag
+        x, y = self.resize(position)
+        self.board[y][x] = self.board[y][x] + [piece]
+        self.pieces[piece] = (x,y)
+        return flag
+
     def read_command(self, piece, direction, ref_piece):
         if self.piece_in_game(ref_piece):
             if self.piece_in_game(piece):
-                self.move(piece, direction, ref_piece)
+               return self.move(piece, direction, ref_piece)
             else:
-                self.insert_piece(piece, self.give_position(direction, ref_piece))
+                return self.insert_piece(piece, self.give_position(direction, ref_piece))
         else:
             return "ref_piece isn't in game"
