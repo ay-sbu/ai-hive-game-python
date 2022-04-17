@@ -60,6 +60,7 @@ display and Input format:
              |0,4|1,4|2,4|3,4|4,4|
               \ / \ / \ / \ / \ /
 		
-		
-		
-
+wA1
+bA1 e wA1
+wA2 sw wA1
+bB1 w wA2

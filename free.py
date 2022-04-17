@@ -2,19 +2,26 @@ from model import pieces
 from model.board import Board
 
 
-# b = Board()
-#
+b = Board()
+
+
 # b.insert_piece("bQ1", (0, 0))
 # b.insert_piece("wQ1", (1, 4))
 # b.insert_piece("bS2", (0, 5))
-# b.insert_piece("bB1", (10, 8))
-# b.insert_piece("wB1", (10, 8))
+# b.add_row(True)
+# b.add_column(True)
+# b.add_column(False)
 #
 #
-#
-# print(b.pieces)
+# print(b.piece_in_game("bQ1"))
 
-pieces.can_move("bA1", (6, 5))
+print(b.read_command("bA1","se","wB2"))
+
+# print(b.pieces)
+# for i in b.board:
+#     print(i)
+#
+# pieces.can_move("bA1", (6, 5))
 
 
 
