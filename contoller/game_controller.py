@@ -23,8 +23,9 @@ def check_place_format(string_place):
     return False
 
 def check_node_format(string_node):
-    if string_node[0] != 'w' or string_node[0] != 'b':
+    if (string_node[0] != 'w' and string_node[0] != 'b') or len(string_node) != 3:
         return False
+    
     
     if string_node[1] != 'B' and \
         string_node[1] != 'Q' and \
@@ -33,28 +34,39 @@ def check_node_format(string_node):
         string_node[1] != 'A':
         return False
 
+    if string_node[1] == 'L' and string_node[1] == 'A':
+        if int(string_node[2]) > 3:
+            return False
+    
+    if string_node[1] == 'S' and string_node[1] == 'B':
+        if int(string_node[2]) > 2:
+            return False
+        
+    if string_node[1] == 'Q':
+        if int(string_node[2]) > 1:
+            return False
+        
+    return True
+    
+    
 
 def check_first_command_format(command):
     commands = command.split()
-    if len(commands) != 1 and check_node_format(command):
+    if len(commands) != 1 or not check_node_format(command):
             print("bad input format!")
             return False
     return True
 
 def check_command_format(command):
     commands = command.split()
-    if len(commands) != 3 and check_node_format(commands[0]) and check_place_format(command[1]) and check_node_format(commands[2]):
+    if len(commands) != 3 or not check_node_format(commands[0]) or not check_place_format(commands[1]) or not check_node_format(commands[2]):
         print("bad input format!")
         return False
     
     
     return True
 
-def change_turn():
-    if GameController.turn == 1:
-        GameController.turn = 0
-    else:
-        GameController.turn = 1
+
 
 class GameController:
     turn = 0 # turn is 0(white) or 1(black)
@@ -68,15 +80,13 @@ class GameController:
 
         if command == "break":
             good_bye()
-
-        is_correct_format = check_first_command_format(command)
         
-        if not is_correct_format:
+        if not check_first_command_format(command):
             good_bye()
             
         # TODO: Add to board
         
-        change_turn()
+        self.change_turn()
 
         # Game Loop
         while True:
@@ -87,14 +97,22 @@ class GameController:
             if command == "break":
                 good_bye()
                 
-            if not is_correct_format:
+            
+                
+            if not check_command_format(command):
                 continue
             
             
+            print("After checking :) command sounds ok")
             
             
+            self.change_turn()
             
-            change_turn()
+    def change_turn(self):
+        if self.turn == 1:
+            self.turn = 0
+        else:
+            self.turn = 1
             
             
             
