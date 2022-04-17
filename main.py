@@ -1,6 +1,5 @@
 import sys
-from hive_game import HiveGame
-from game_controller import GameController
+from contoller.game_controller import GameController
 
 
 def main():
