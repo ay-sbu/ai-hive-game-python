@@ -1,4 +1,5 @@
 import string
+from view import print_board
 
 from model.board import Board
 
@@ -132,3 +133,6 @@ class GameController:
 
             print(b.board)
             print(b.pieces)
+            
+            print_board(b.board)
+            
