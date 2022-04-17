@@ -50,16 +50,27 @@ def check_node_format(string_node):
     
     
 
-def check_first_command_format(command):
+def check_first_command_format(command, turn):
     commands = command.split()
-    if len(commands) != 1 or not check_node_format(command):
+    if len(commands) != 1 or not check_node_format(command) or bad_turn(command[0], turn):
             print("bad input format!")
             return False
     return True
 
-def check_command_format(command):
+def bad_turn(color, turn):
+    if turn == 0 and color == 'b':
+        return True
+    
+    if turn == 1 and color == 'w':
+        return True
+    
+    return False
+
+def check_command_format(command, turn):
     commands = command.split()
-    if len(commands) != 3 or not check_node_format(commands[0]) or not check_place_format(commands[1]) or not check_node_format(commands[2]):
+    if len(commands) != 3 or not check_node_format(commands[0]) or \
+        not check_place_format(commands[1]) or not check_node_format(commands[2]) or \
+            bad_turn(commands[0][0], turn):
         print("bad input format!")
         return False
     
@@ -67,11 +78,14 @@ def check_command_format(command):
     return True
 
 
-
+            
+            
 class GameController:
-    turn = 0 # turn is 0(white) or 1(black)
+    
 
     def start(self):
+        
+        turn = 0
         
         # first command input
         print_menu()
@@ -81,13 +95,16 @@ class GameController:
         if command == "break":
             good_bye()
         
-        if not check_first_command_format(command):
+        if not check_first_command_format(command, turn):
             good_bye()
             
         # TODO: Add to board
         
-        self.change_turn()
-
+        if turn == 1:
+            turn = 0
+        else:
+            turn = 1
+        
         # Game Loop
         while True:
             print_menu()
@@ -99,20 +116,18 @@ class GameController:
                 
             
                 
-            if not check_command_format(command):
+            if not check_command_format(command, turn):
                 continue
             
             
             print("After checking :) command sounds ok")
             
-            
-            self.change_turn()
-            
-    def change_turn(self):
-        if self.turn == 1:
-            self.turn = 0
-        else:
-            self.turn = 1
+            if turn == 1:
+                turn = 0
+            else:
+                turn = 1
+    
+    
             
             
             
