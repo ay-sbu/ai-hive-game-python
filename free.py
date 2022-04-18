@@ -8,9 +8,9 @@ b = Board()
 
 
 
-b.board = [[[], ["bQ1"], []],
-            [[], [], ["wA1"]],
-         [[], ["bS2"], []]]
+b.board = [[[], ["bQ1"], ["wQ1"]],
+            [["bS1"], [], ["wA1"]],
+         [[], ["bS2"], ["bS3"]]]
 
 print_board(b.board)
 print(check_surrounding((1,1),b))

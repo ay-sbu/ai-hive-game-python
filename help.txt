@@ -8,7 +8,7 @@ main.py
 	- model
 		board.py
 		- Pieces
-			- ant.py 	مورچه
+			#- ant.py 	مورچه
 			- queen.py 	زنبور
 			- beetle.py سوسک
 			- locust.py ملخ

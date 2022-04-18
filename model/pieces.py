@@ -129,8 +129,6 @@ def spider_move(piece, position):
     pass
 
 
-def check_surrounding():
-    pass
 def check_surrounding(position,board):
     arounds = around(position)
     for i in range(0,3):

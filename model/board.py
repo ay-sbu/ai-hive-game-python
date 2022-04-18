@@ -1,7 +1,6 @@
 from model.pieces import can_move
 
 
-
 class Board(object):
 
     def __init__(self):
@@ -147,3 +146,30 @@ class Board(object):
                 return self.insert_piece(piece, self.give_position(direction, ref_piece))
         else:
             return "ref_piece isn't in game"
+
+    def end_game(self):
+        white_win = True
+        x,y = self.pieces["bQ1"]
+        arounds = self.around((x,y))
+        for neighbour in arounds:
+            x, y = neighbour
+            if self.board[y][x] == []:
+                white_win = False
+
+        black_win = True
+        x, y = self.pieces["wQ1"]
+        arounds = self.around((x, y))
+        for neighbour in arounds:
+            x, y = neighbour
+            if self.board[y][x] == []:
+                black_win = False
+        if white_win:
+            if black_win:
+                print("The game equalised")
+                return True
+            print("Black lose tha game and white win")
+            return True
+        if black_win:
+            print("White lose tha game and black win")
+            return True
+        return False
