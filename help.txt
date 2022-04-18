@@ -11,7 +11,7 @@ main.py
 			#- ant.py 	مورچه
 			- queen.py 	زنبور
 			- beetle.py سوسک
-			#- locust.py ملخ
+		    #- locust.py ملخ
 			- spider.py عنکبوت
 		
 	- controller

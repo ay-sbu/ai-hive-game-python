@@ -120,6 +120,9 @@ class Board(object):
                 return x + 1, y + 1
 
     def move(self, piece, direction, ref_piece):
+        color = piece[0]
+        if not (color + "Q1") in self.pieces:
+            return "queen has not entered the game"
         position = self.give_position(direction, ref_piece)
         x,y = position
 
@@ -131,15 +134,15 @@ class Board(object):
         return "movement is invalid"
 
     def insert_piece(self, piece, position):
-        flag = self.possible_insert(piece, position)
-        if not flag == "ok" and self.initial_turn < 0:
-            return flag
+        message = self.possible_insert(piece, position)
+        if not message == "ok" and self.initial_turn < 0:
+            return message
         self.initial_turn -= 1
-        flag = "ok"
+        message = "ok"
         x, y = self.resize(position)
         self.board[y][x] = self.board[y][x] + [piece]
         self.pieces[piece] = (x, y)
-        return flag
+        return message
 
     def read_command(self, piece, direction, ref_piece):
         if self.piece_in_game(ref_piece):

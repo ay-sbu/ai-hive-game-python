@@ -62,10 +62,10 @@ def check_first_command_format(command, turn):
 
 
 def bad_turn(color, turn):
-    if turn == 0 and color == 'b':
+    if turn % 2 == 0 and color == 'b':
         return True
 
-    if turn == 1 and color == 'w':
+    if turn % 2 == 1 and color == 'w':
         return True
 
     return False
@@ -123,6 +123,13 @@ class GameController:
 
             commands = command.split(" ")
 
+            if turn == 6 and not "wQ1" in b.pieces:
+                print("queen must entered in game before 5th turn")
+                continue
+            if turn == 7 and not "bQ1" in b.pieces:
+                print("queen must entered in game before 5th turn")
+                continue
+
             massage = b.read_command(commands[0],commands[1],commands[2])
             print(massage)
             if b.end_game():
@@ -132,10 +139,7 @@ class GameController:
             else:
                 continue
 
-            if turn == 1:
-                turn = 0
-            else:
-                turn = 1
+            turn += 1
 
             print(b.board)
             print(b.pieces)
