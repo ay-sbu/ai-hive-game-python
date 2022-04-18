@@ -79,3 +79,21 @@ bA1 e wA1
 wA2 w wA1
 bA2 e bA1
 wA3 sw wA1
+
+
+wQ1
+bQ1 w wQ1
+wL1 e wQ1
+bL1 sw bQ1
+wL1 w bQ1
+bL1 ne bQ1
+
+
+
+wQ1
+bQ1 w wQ1
+wL1 e wQ1
+bL1 sw bQ1
+wL1 w bQ1
+bA1 se bL1
+wL1 se bA1
