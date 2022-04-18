@@ -30,7 +30,7 @@ def print_board(board):
         for col in row:
             print(" \\ /", end='')
             
-        if i % 2 == 0 and len(board[0]) % 2 == 0:
+        if i % 2 == 0:
             print(" \\", end="")
         
         print()
