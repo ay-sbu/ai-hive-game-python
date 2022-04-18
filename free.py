@@ -14,8 +14,9 @@ b = Board()
 #
 #
 # print(b.piece_in_game("bQ1"))
-
-print(b.read_command("bA1","se","wB2"))
+b= [[[], ['wA1']], [['wA2'], []]]
+b[0][1].remove('wA1')
+print(b)
 
 # print(b.pieces)
 # for i in b.board:

@@ -1,3 +1,22 @@
+from model.pieces import can_move
+
+
+def around(position):
+    x, y = position
+    around_point = [(x + 1, y), (x - 1, y)]
+    if y % 2 == 0:
+        around_point.append((x, y - 1))
+        around_point.append((x, y + 1))
+        around_point.append((x - 1, y - 1))
+        around_point.append((x - 1, y + 1))
+    else:
+        around_point.append((x, y - 1))
+        around_point.append((x, y + 1))
+        around_point.append((x + 1, y - 1))
+        around_point.append((x + 1, y + 1))
+    return around_point
+
+
 class Board(object):
 
     def __init__(self):
@@ -56,13 +75,13 @@ class Board(object):
 
     @staticmethod
     def around(position):
-        x,y = position
+        x, y = position
         around_point = [(x + 1, y), (x - 1, y)]
         if y % 2 == 0:
-            around_point.append((x,y-1))
-            around_point.append((x,y+1))
-            around_point.append((x-1,y-1))
-            around_point.append((x-1,y+1))
+            around_point.append((x, y - 1))
+            around_point.append((x, y + 1))
+            around_point.append((x - 1, y - 1))
+            around_point.append((x - 1, y + 1))
         else:
             around_point.append((x, y - 1))
             around_point.append((x, y + 1))
@@ -117,7 +136,13 @@ class Board(object):
 
     def move(self, piece, direction, ref_piece):
         position = self.give_position(direction, ref_piece)
-        # TODO : check that
+        x,y = position
+
+        if can_move(piece, position, self):
+            self.board[y][x] = self.board[y][x] + [piece]
+            self.pieces[piece] = (x, y)
+            return "ok"
+        return "movement is invalid"
 
     def insert_piece(self, piece, position):
         flag = self.possible_insert(piece, position)
@@ -125,13 +150,13 @@ class Board(object):
             return flag
         x, y = self.resize(position)
         self.board[y][x] = self.board[y][x] + [piece]
-        self.pieces[piece] = (x,y)
+        self.pieces[piece] = (x, y)
         return flag
 
     def read_command(self, piece, direction, ref_piece):
         if self.piece_in_game(ref_piece):
             if self.piece_in_game(piece):
-               return self.move(piece, direction, ref_piece)
+                return self.move(piece, direction, ref_piece)
             else:
                 return self.insert_piece(piece, self.give_position(direction, ref_piece))
         else:
