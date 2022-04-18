@@ -1,22 +1,26 @@
 from model import pieces
 from model.board import Board
-
+from model.pieces import check_surrounding
+from view import print_board
 
 b = Board()
 
 
-# b.insert_piece("bQ1", (0, 0))
-# b.insert_piece("wQ1", (1, 4))
-# b.insert_piece("bS2", (0, 5))
-# b.add_row(True)
-# b.add_column(True)
-# b.add_column(False)
-#
-#
+
+
+b.board = [[[], ["bQ1"], []],
+            [[], [], ["wA1"]],
+         [[], ["bS2"], []]]
+
+print_board(b.board)
+print(check_surrounding((1,1),b))
+
+
+
 # print(b.piece_in_game("bQ1"))
-b= [[[], ['wA1']], [['wA2'], []]]
-b[0][1].remove('wA1')
-print(b)
+# b= [[[], ['wA1']], [['wA2'], []]]
+# b[0][1].remove('wA1')
+# print(b)
 
 # print(b.pieces)
 # for i in b.board:
