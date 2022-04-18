@@ -1,13 +1,13 @@
 from model.pieces import can_move
 
 
-
 class Board(object):
 
     def __init__(self):
         # the board starts with one row and a column without pieces
         self.pieces = {}
         self.board = [[[]]]
+        self.initial_turn = 0
 
     def add_row(self, first=False):
         new_row = []
@@ -120,6 +120,9 @@ class Board(object):
                 return x + 1, y + 1
 
     def move(self, piece, direction, ref_piece):
+        color = piece[0]
+        if not (color + "Q1") in self.pieces:
+            return "queen has not entered the game"
         position = self.give_position(direction, ref_piece)
         x,y = position
 
@@ -131,13 +134,15 @@ class Board(object):
         return "movement is invalid"
 
     def insert_piece(self, piece, position):
-        flag = self.possible_insert(piece, position)
-        if not flag == "ok":
-            return flag
+        message = self.possible_insert(piece, position)
+        if not message == "ok" and self.initial_turn < 0:
+            return message
+        self.initial_turn -= 1
+        message = "ok"
         x, y = self.resize(position)
         self.board[y][x] = self.board[y][x] + [piece]
         self.pieces[piece] = (x, y)
-        return flag
+        return message
 
     def read_command(self, piece, direction, ref_piece):
         if self.piece_in_game(ref_piece):
@@ -147,3 +152,33 @@ class Board(object):
                 return self.insert_piece(piece, self.give_position(direction, ref_piece))
         else:
             return "ref_piece isn't in game"
+
+    def end_game(self):
+        try:
+            white_win = True
+            x,y = self.pieces["bQ1"]
+            arounds = self.around((x,y))
+            for neighbour in arounds:
+                x, y = neighbour
+                if self.board[y][x] == []:
+                    white_win = False
+
+            black_win = True
+            x, y = self.pieces["wQ1"]
+            arounds = self.around((x, y))
+            for neighbour in arounds:
+                x, y = neighbour
+                if self.board[y][x] == []:
+                    black_win = False
+            if white_win:
+                if black_win:
+                    print("The game equalised")
+                    return True
+                print("Black lose tha game and white win")
+                return True
+            if black_win:
+                print("White lose tha game and black win")
+                return True
+        except:
+            pass
+        return False

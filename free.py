@@ -1,19 +1,19 @@
-# from model import pieces
-# from model.board import Board
-# from model.pieces import check_surrounding
-# from view import print_board
+from model import pieces
+from model.board import Board
+from model.pieces import check_surrounding
+from view import print_board
 
-# b = Board()
-
-
+b = Board()
 
 
-# b.board = [[[], ["bQ1"], []],
-#             [[], [], ["wA1"]],
-#          [[], ["bS2"], []]]
 
-# print_board(b.board)
-# print(check_surrounding((1,1),b))
+
+b.board = [[[], ["bQ1"], []],
+            [[], [], ["wA1"]],
+         [[], ["bS2"], []]]
+
+print_board(b.board)
+print(check_surrounding((1,1),b))
 
 
 
@@ -80,10 +80,3 @@
 
 # board = [[[12, 14, 2, 6, 0], [2, 3, 4]], [[3, 6], [7, 10]], [0], [6]]
 # print(board[0][1][0])
-
-position1 = (1, 2)
-position2 = (1, 2)
-
-position1[0] += 1
-
-print(position1)
