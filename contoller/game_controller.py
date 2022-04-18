@@ -122,7 +122,12 @@ class GameController:
                 continue
 
             commands = command.split(" ")
-            print(b.read_command(commands[0],commands[1],commands[2]))
+
+            massage = b.read_command(commands[0],commands[1],commands[2])
+            if massage == "ok":
+                print(massage)
+            else:
+                continue
 
             if turn == 1:
                 turn = 0

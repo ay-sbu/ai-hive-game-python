@@ -141,6 +141,7 @@ class Board(object):
         if can_move(piece, position, self):
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
+            self.board[y][x].remove(piece)
             return "ok"
         return "movement is invalid"
 
