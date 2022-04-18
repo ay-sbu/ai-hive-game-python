@@ -7,6 +7,7 @@ class Board(object):
         # the board starts with one row and a column without pieces
         self.pieces = {}
         self.board = [[[]]]
+        self.initial_turn = 0
 
     def add_row(self, first=False):
         new_row = []
@@ -131,8 +132,10 @@ class Board(object):
 
     def insert_piece(self, piece, position):
         flag = self.possible_insert(piece, position)
-        if not flag == "ok":
+        if not flag == "ok" and self.initial_turn < 0:
             return flag
+        self.initial_turn -= 1
+        flag = "ok"
         x, y = self.resize(position)
         self.board[y][x] = self.board[y][x] + [piece]
         self.pieces[piece] = (x, y)
@@ -148,28 +151,31 @@ class Board(object):
             return "ref_piece isn't in game"
 
     def end_game(self):
-        white_win = True
-        x,y = self.pieces["bQ1"]
-        arounds = self.around((x,y))
-        for neighbour in arounds:
-            x, y = neighbour
-            if self.board[y][x] == []:
-                white_win = False
+        try:
+            white_win = True
+            x,y = self.pieces["bQ1"]
+            arounds = self.around((x,y))
+            for neighbour in arounds:
+                x, y = neighbour
+                if self.board[y][x] == []:
+                    white_win = False
 
-        black_win = True
-        x, y = self.pieces["wQ1"]
-        arounds = self.around((x, y))
-        for neighbour in arounds:
-            x, y = neighbour
-            if self.board[y][x] == []:
-                black_win = False
-        if white_win:
-            if black_win:
-                print("The game equalised")
+            black_win = True
+            x, y = self.pieces["wQ1"]
+            arounds = self.around((x, y))
+            for neighbour in arounds:
+                x, y = neighbour
+                if self.board[y][x] == []:
+                    black_win = False
+            if white_win:
+                if black_win:
+                    print("The game equalised")
+                    return True
+                print("Black lose tha game and white win")
                 return True
-            print("Black lose tha game and white win")
-            return True
-        if black_win:
-            print("White lose tha game and black win")
-            return True
+            if black_win:
+                print("White lose tha game and black win")
+                return True
+        except:
+            pass
         return False

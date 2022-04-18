@@ -124,6 +124,7 @@ class GameController:
             commands = command.split(" ")
 
             massage = b.read_command(commands[0],commands[1],commands[2])
+            print(massage)
             if b.end_game():
                 break
             if massage == "ok":

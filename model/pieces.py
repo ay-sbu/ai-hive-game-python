@@ -42,8 +42,8 @@ def can_move(piece, des_position, board):
         return ant_move(des_position,(x,y),board)
     # elif piece_role == 'B':
     #     return beetle_move(piece, position)
-    elif piece_role == 'L':
-        return locust_move((x, y), des_position, board)
+    # elif piece_role == 'L':
+    #     return locust_move((x, y), des_position, board)
     # elif piece_role == 'Q':
     #     return queen_move(piece, position)
     # elif piece_role == 'S':
@@ -89,36 +89,36 @@ def beetle_move(piece, position, des_position, board):
     pass
 
 
-def locust_move(position, des_position, board):
-    # locust can't go to his arounds
-    if abs(position.x - des_position.x) <= 1 and \
-            abs(position.y - des_position.y) <= 1:
-        return False
-
-    # find type of move
-    move_type = ''
-    if position.x == des_position.x:
-        move_type = 'hor'
-    elif position.y == des_position.y:
-        move_type = 'ver'
-    elif abs(position.x - des_position.x) != abs(position.y - des_position.y):
-        move_type = 'dia'
-    else:
-        print("Not Valid move Type")
-        return False
-
-    # locust should move in line (horizontal, vertical and diagonal)
-    if not move_type == 'hor' and \
-            not move_type == 'ver' and \
-            not move_type == 'dia':
-        return False
-
-    # locust should insert in first blank position
-    
-    while True:
-        
-
-    return True
+# def locust_move(position, des_position, board):
+#     # locust can't go to his arounds
+#     if abs(position.x - des_position.x) <= 1 and \
+#             abs(position.y - des_position.y) <= 1:
+#         return False
+#
+#     # find type of move
+#     move_type = ''
+#     if position.x == des_position.x:
+#         move_type = 'hor'
+#     elif position.y == des_position.y:
+#         move_type = 'ver'
+#     elif abs(position.x - des_position.x) != abs(position.y - des_position.y):
+#         move_type = 'dia'
+#     else:
+#         print("Not Valid move Type")
+#         return False
+#
+#     # locust should move in line (horizontal, vertical and diagonal)
+#     if not move_type == 'hor' and \
+#             not move_type == 'ver' and \
+#             not move_type == 'dia':
+#         return False
+#
+#     # locust should insert in first blank position
+#
+#     while True:
+#
+#
+#     return True
 
 
 def queen_move(piece, position, board):
