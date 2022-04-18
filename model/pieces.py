@@ -1,4 +1,6 @@
 import copy
+from ctypes import resize
+import model.board
 from shutil import move
 
 
@@ -43,7 +45,7 @@ def can_move(piece, des_position, board):
     # elif piece_role == 'B':
     #     return beetle_move(piece, position)
     elif piece_role == 'L':
-        return locust_move((x, y), des_position, board)
+        return locust_move(piece, (x, y), des_position, board)
     # elif piece_role == 'Q':
     #     return queen_move(piece, position)
     # elif piece_role == 'S':
@@ -91,6 +93,8 @@ def beetle_move(piece, position, des_position, board):
 
 def locust_move(piece, position, des_position, board):
     
+    
+    pos_x, pos_y = position
     x, y = position
     des_x, des_y = des_position
     
@@ -123,10 +127,11 @@ def locust_move(piece, position, des_position, board):
     while True:
             
         if y == des_y and x == des_x:
-            board[y][x].append(piece)
+            board.board[pos_y][pos_x].remove(piece)
+            board.insert_piece(piece, (x, y))
             return True
         
-        if board[y][x] == []:
+        if board.board[y][x] == []:
             return False
         
         # no_direction for y
@@ -175,20 +180,22 @@ def locust_move(piece, position, des_position, board):
             if y < des_y:
                 return False
             
-            if y % 2 == 0:
-                if x_direction == 'r':
-                    
-                    x += 1
-                    
-                    if x > des_x:
-                        return False
-                    
-                else:
-                    
-                    x -= 1
-                    
-                    if x < des_x:
-                        return False
+            # if y % 2 == 0:
+            if x_direction == 'r':
+                
+                x += 1
+                
+                # TODO: something here
+                
+                if x > des_x:
+                    return False
+                
+            else:
+                
+                x -= 1
+                
+                if x < des_x:
+                    return False
         
          
 

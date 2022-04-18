@@ -77,21 +77,23 @@ class Board(object):
     def possible_insert(self, piece, position):
         around_point = self.around(position)
         color = piece[0]
-        flag = False
-        for point in around_point:
-            x, y = point
-            try:
-                point_near = self.board[y][x][0]
-                if not point_near == []:
-                    if not point_near[0] == color:
-                        return "the piece should not be next to other color"
-                    else:
-                        flag = True
-            except:
-                pass
-        if flag:
-            return "ok"
-        return "the piece should be next to its color"
+        # flag = False
+        # for point in around_point:
+        #     x, y = point
+        #     try:
+        #         point_near = self.board[y][x][0]
+        #         if not point_near == []:
+        #             print("here", point_near, color, piece)
+        #             if not point_near[0] == color:
+        #                 return "the piece should not be next to other color"
+        #             else:
+        #                 flag = True
+        #     except:
+        #         pass
+        # if flag:
+        #     return "ok"
+        # return "the piece should be next to its color"
+        return "ok"
 
     def give_position(self, direction, piece):
         """ return the position of direction than piece """
