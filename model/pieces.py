@@ -89,37 +89,108 @@ def beetle_move(piece, position, des_position, board):
     pass
 
 
-def locust_move(position, des_position, board):
+def locust_move(piece, position, des_position, board):
+    
+    x, y = position
+    des_x, des_y = des_position
+    
     # locust can't go to his arounds
-    if abs(position.x - des_position.x) <= 1 and \
-            abs(position.y - des_position.y) <= 1:
+    if abs(x - des_x) <= 1 and \
+            abs(y - des_y) <= 1:
         return False
 
-    # find type of move
-    move_type = ''
-    if position.x == des_position.x:
-        move_type = 'hor'
-    elif position.y == des_position.y:
-        move_type = 'ver'
-    elif abs(position.x - des_position.x) != abs(position.y - des_position.y):
-        move_type = 'dia'
+    # find move direction
+    y_direction = ''
+    x_direction = ''
+    if y == des_y:
+        y_direction = 'no'
+    elif y < des_y:
+        y_direction = 'r'
     else:
-        print("Not Valid move Type")
+        y_direction = 'l'
+    
+    if x == des_x:
         return False
-
-    # locust should move in line (horizontal, vertical and diagonal)
-    if not move_type == 'hor' and \
-            not move_type == 'ver' and \
-            not move_type == 'dia':
-        return False
+    elif x < des_x:
+        x_direction = 'r'
+    elif x > des_x:
+        x_direction = 'l'
+    
 
     # locust should insert in first blank position
     
+    # move position to des_position Loop
     while True:
+            
+        if y == des_y and x == des_x:
+            board[y][x].append(piece)
+            return True
         
-
-    return True
-
+        if board[y][x] == []:
+            return False
+        
+        # no_direction for y
+        if y_direction == 'no':
+            
+            if x_direction == 'r': 
+                
+                x += 1
+                
+                if x > des_x:
+                    return False
+                
+            else:
+                
+                x -= 1
+                
+                if x < des_x:
+                    return False
+                
+        elif y_direction == 'r':
+            
+            y += 1
+            
+            if y > des_y:
+                return False
+            
+            if y % 2 == 0:
+                if x_direction == 'r':
+                    
+                    x += 1
+                    
+                    if x > des_x:
+                        return False
+                    
+                else:
+                    
+                    x -= 1
+                    
+                    if x < des_x:
+                        return False
+                
+        else:
+            
+            y -= 1
+            
+            if y < des_y:
+                return False
+            
+            if y % 2 == 0:
+                if x_direction == 'r':
+                    
+                    x += 1
+                    
+                    if x > des_x:
+                        return False
+                    
+                else:
+                    
+                    x -= 1
+                    
+                    if x < des_x:
+                        return False
+        
+         
 
 def queen_move(piece, position, board):
     pass

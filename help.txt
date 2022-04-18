@@ -71,3 +71,11 @@ wA1
 bA1 e wA1
 wA2 e bA1
 wA2 e bA2
+
+
+
+wA1
+bA1 e wA1
+wA2 w wA1
+bA2 e bA1
+wA3 sw wA1
