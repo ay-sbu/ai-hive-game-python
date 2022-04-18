@@ -2,6 +2,25 @@ import copy
 from shutil import move
 
 
+
+def around(position):
+    x, y = position
+    around_point = [(x + 1, y)]
+    if y % 2 == 0:
+        around_point.append((x, y + 1))
+        around_point.append((x - 1, y + 1))
+        around_point.append((x - 1, y))
+        around_point.append((x - 1, y - 1))
+        around_point.append((x, y - 1))
+    else:
+        around_point.append((x + 1, y + 1))
+        around_point.append((x, y + 1))
+        around_point.append((x - 1, y))
+        around_point.append((x, y - 1))
+        around_point.append((x + 1, y - 1))
+    return around_point
+
+
 def can_move(piece, des_position, board):
     # it can be 'A', 'B', 'L', 'Q', 'S'
     piece_role = piece[1]
@@ -20,7 +39,7 @@ def can_move(piece, des_position, board):
             return False
 
     if piece_role == 'A':
-        return ant_move()
+        return ant_move(des_position,(x,y),board)
     # elif piece_role == 'B':
     #     return beetle_move(piece, position)
     elif piece_role == 'L':
@@ -42,7 +61,6 @@ def check_continuity(board, position):
 
 
 def traverse(position, board):
-    from model.board import around
     arounds = around(position)
     for neighbour in arounds:
         x, y = neighbour
@@ -60,8 +78,11 @@ def traverse(position, board):
             traverse(neighbour, board)
 
 
-def ant_move():
-    return True
+def ant_move(des_position,position,board):
+    if check_surrounding(des_position,board) \
+            and check_surrounding(position,board):
+        return True
+    return False
 
 
 def beetle_move(piece, position, des_position, board):
@@ -110,3 +131,19 @@ def spider_move(piece, position):
 
 def check_surrounding():
     pass
+def check_surrounding(position,board):
+    arounds = around(position)
+    for i in range(0,3):
+        x,y = arounds[i*2]
+        if board.board[y][x] == []:
+            x, y = arounds[(i * 2)+1]
+            if board.board[y][x]==[]:
+                return True
+            x, y = arounds[(i * 2) - 1]
+            if board.board[y][x] == []:
+                return True
+    return False
+
+
+
+

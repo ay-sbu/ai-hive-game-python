@@ -1,21 +1,6 @@
 from model.pieces import can_move
 
 
-def around(position):
-    x, y = position
-    around_point = [(x + 1, y), (x - 1, y)]
-    if y % 2 == 0:
-        around_point.append((x, y - 1))
-        around_point.append((x, y + 1))
-        around_point.append((x - 1, y - 1))
-        around_point.append((x - 1, y + 1))
-    else:
-        around_point.append((x, y - 1))
-        around_point.append((x, y + 1))
-        around_point.append((x + 1, y - 1))
-        around_point.append((x + 1, y + 1))
-    return around_point
-
 
 class Board(object):
 
