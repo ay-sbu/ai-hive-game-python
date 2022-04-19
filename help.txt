@@ -61,17 +61,17 @@ display and Input format:
 
 wA1
 bA1 e wA1
-wA2 sw wA1
-bB1 w wA2
-wA1 e wA2
-
+wA2 w wA1
+bB1 ne bA1
+wA3 w wA2
+bB2 ne bA1
 
 
 wA1
 bA1 e wA1
 wA2 e bA1
 wA2 e bA2
-
+bB2 ne bA1
 
 
 wA1
