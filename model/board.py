@@ -77,6 +77,7 @@ class Board(object):
     def possible_insert(self, piece, position):
         around_point = self.around(position)
         color = piece[0]
+
         flag = False
         for point in around_point:
             x, y = point
