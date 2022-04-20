@@ -89,14 +89,13 @@ wL1 w bQ1
 bL1 ne bQ1
 
 
-
+LOCUST TEST:
 wQ1
 bQ1 w wQ1
 wL1 e wQ1
 bL1 sw bQ1
 wL1 w bQ1
 bA1 se bL1
-wL1 se bA1
 
 
 
@@ -105,9 +104,21 @@ bA1 ne wA1
 
 
 
+
+
 wA1
-bA1 e wA1
-wQ1 w wA1
-bQ1 e bA1
+bA1 se wA1
+wA2 nw wA1
+bL1 se bA1
+wL1 sw wA2
+bA2 e bA1
+wA3 ne wA1
 wQ1 sw wA1
-wA3 sw wA1
+wQ1 ne wA2
+bA3 w bA1
+bQ1 e bA2
+wL1 e wA1
+bL1 w wQ1
+wL1 sw bQ1
+bL1 w wL1
+

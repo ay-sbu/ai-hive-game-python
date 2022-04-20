@@ -9,10 +9,16 @@ def good_bye():
     exit()
 
 
-def print_menu():
+def print_menu(turn):
     print("\n")
-    print(" ------- HiveGame ------- ")
-    print("input your command: ", end='')
+    print("------- HiveGame ------- ")
+    print("$ turn : ", end='')
+    if turn % 2 == 0:
+        print("white")
+    else:
+        print("black")
+        
+    print("$ input your command > ", end='')
 
 
 def check_place_format(string_place):
@@ -90,7 +96,7 @@ class GameController:
         turn = 0
 
         # first command input
-        print_menu()
+        print_menu(turn)
 
         command = input()
 
@@ -108,10 +114,12 @@ class GameController:
             turn = 0
         else:
             turn = 1
+            
+        print_board(b.board)
 
         # Game Loop
         while True:
-            print_menu()
+            print_menu(turn)
 
             command = input()
 
