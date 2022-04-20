@@ -131,13 +131,15 @@ class Board(object):
         color = piece[0]
         if not (color + "Q1") in self.pieces:
             return "queen has not entered the game"
-        position = self.give_position(direction, ref_piece)
-        x,y = position
 
+        xx, yy = self.pieces.get(piece)
+
+        position = self.give_position(direction, ref_piece)
+        x, y = self.resize(position)
         if can_move(piece, position, self):
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
-            self.board[y][x].remove(piece)
+            self.board[yy][xx].remove(piece)
             return "ok"
         return "movement is invalid"
 

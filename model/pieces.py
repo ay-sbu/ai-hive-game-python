@@ -39,6 +39,10 @@ def can_move(piece, des_position, board):
         if not check_continuity(new_board, (x, y)):
             return False
 
+    new_board = copy.deepcopy(board)
+    new_board.board[y][x].remove(piece)
+    del new_board.pieces[piece]
+
     if piece_role == 'A':
         return ant_move(des_position, (x, y), new_board, piece)
     elif piece_role == 'B':
@@ -255,12 +259,15 @@ def spider_checking(des_position, board, piece):
 def check_surrounding(position, board, piece):
     arounds = around(position)
     for i in range(0, 3):
-        x, y = arounds[i * 2]
-        if board.board[y][x] == [] or board.board[y][x][-1] == piece:
-            x, y = arounds[(i * 2) + 1]
+        try:
+            x, y = arounds[i * 2]
             if board.board[y][x] == [] or board.board[y][x][-1] == piece:
-                return True
-            x, y = arounds[(i * 2) - 1]
-            if board.board[y][x] == [] or board.board[y][x][-1] == piece:
-                return True
+                x, y = arounds[(i * 2) + 1]
+                if board.board[y][x] == [] or board.board[y][x][-1] == piece:
+                    return True
+                x, y = arounds[(i * 2) - 1]
+                if board.board[y][x] == [] or board.board[y][x][-1] == piece:
+                    return True
+        except:
+            pass
     return False
