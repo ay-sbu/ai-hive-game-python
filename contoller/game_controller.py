@@ -123,10 +123,10 @@ class GameController:
 
             commands = command.split(" ")
 
-            if turn == 6 and not "wQ1" in b.pieces:
+            if turn == 6 and not "wQ1" in b.pieces and not commands[0][1] =="Q":
                 print("queen must entered in game before 5th turn")
                 continue
-            if turn == 7 and not "bQ1" in b.pieces:
+            if turn == 7 and not "bQ1" in b.pieces and not commands[0][1] =="Q":
                 print("queen must entered in game before 5th turn")
                 continue
 

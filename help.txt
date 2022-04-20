@@ -97,3 +97,8 @@ bL1 sw bQ1
 wL1 w bQ1
 bA1 se bL1
 wL1 se bA1
+
+
+
+wA1
+bA1 ne wA1

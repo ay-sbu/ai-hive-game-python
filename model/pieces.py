@@ -4,7 +4,6 @@ import model.board
 from shutil import move
 
 
-
 def around(position):
     x, y = position
     around_point = [(x + 1, y)]
@@ -41,18 +40,18 @@ def can_move(piece, des_position, board):
             return False
 
     if piece_role == 'A':
-        return ant_move(des_position,(x,y),board)
-    # elif piece_role == 'B':
-    #     return beetle_move(piece, position)
+        return ant_move(des_position, (x, y), new_board, piece)
+    elif piece_role == 'B':
+        return beetle_move(des_position, (x, y), new_board, piece)
     elif piece_role == 'L':
-        return locust_move(piece, (x, y), des_position, board)
-    # elif piece_role == 'Q':
-    #     return queen_move(piece, position)
-    # elif piece_role == 'S':
-    #     return spider_move(piece, position)
-    # else:
-    #     print("something wrong")
-    #     return False
+        return locust_move(des_position, (x, y), board, piece)
+    elif piece_role == 'Q':
+        return queen_move(des_position, (x, y), new_board, piece)
+    elif piece_role == 'S':
+        return spider_move(des_position, (x, y), new_board, piece)
+    else:
+        print("something wrong")
+        return False
 
 
 def check_continuity(board, position):
@@ -80,24 +79,32 @@ def traverse(position, board):
             traverse(neighbour, board)
 
 
-def ant_move(des_position,position,board):
-    if check_surrounding(des_position,board) \
-            and check_surrounding(position,board):
-        return True
+def ant_move(des_position, position, board, piece):
+    x, y = des_position
+    if board.board[y][x] == []:
+        if check_surrounding(des_position, board, piece) \
+                and check_surrounding(position, board, piece):
+            return True
     return False
 
 
-def beetle_move(piece, position, des_position, board):
-    pass
+def beetle_move(des_position, position, board, piece):
+    x, y = des_position
+    if des_position in around(position):
+        if board.board[y][x] == []:
+            if check_surrounding(des_position, board, piece) \
+                    and check_surrounding(position, board, piece):
+                return True
+        else:
+            return True
+    return False
 
 
-def locust_move(piece, position, des_position, board):
-    
-    
+def locust_move(des_position, position, board, piece):
     pos_x, pos_y = position
     x, y = position
     des_x, des_y = des_position
-    
+
     # locust can't go to his arounds
     if abs(x - des_x) <= 1 and \
             abs(y - des_y) <= 1:
@@ -112,116 +119,148 @@ def locust_move(piece, position, des_position, board):
         y_direction = 'r'
     else:
         y_direction = 'l'
-    
+
     if x == des_x:
         return False
     elif x < des_x:
         x_direction = 'r'
     elif x > des_x:
         x_direction = 'l'
-    
 
     # locust should insert in first blank position
-    
+
     # move position to des_position Loop
     while True:
-            
+
         if y == des_y and x == des_x:
             board.board[pos_y][pos_x].remove(piece)
             board.insert_piece(piece, (x, y))
             return True
-        
+
         if board.board[y][x] == []:
             return False
-        
+
         # no_direction for y
         if y_direction == 'no':
-            
-            if x_direction == 'r': 
-                
+
+            if x_direction == 'r':
+
                 x += 1
-                
+
                 if x > des_x:
                     return False
-                
+
             else:
-                
+
                 x -= 1
-                
+
                 if x < des_x:
                     return False
-                
+
         elif y_direction == 'r':
-            
+
             y += 1
-            
+
             if y > des_y:
                 return False
-            
+
             if y % 2 == 0:
                 if x_direction == 'r':
-                    
+
                     x += 1
-                    
+
                     if x > des_x:
                         return False
-                    
+
                 else:
-                    
+
                     x -= 1
-                    
+
                     if x < des_x:
                         return False
-                
+
         else:
-            
+
             y -= 1
-            
+
             if y < des_y:
                 return False
-            
+
             # if y % 2 == 0:
             if x_direction == 'r':
-                
+
                 x += 1
-                
+
                 # TODO: something here
-                
+
                 if x > des_x:
                     return False
-                
+
             else:
-                
+
                 x -= 1
-                
+
                 if x < des_x:
                     return False
-        
-         
-
-def queen_move(piece, position, board):
-    pass
 
 
-def spider_move(piece, position):
-    pass
-
-
-def check_surrounding():
-    pass
-def check_surrounding(position,board):
-    arounds = around(position)
-    for i in range(0,3):
-        x,y = arounds[i*2]
+def queen_move(des_position, position, board, piece):
+    x, y = des_position
+    if des_position in around(position):
         if board.board[y][x] == []:
-            x, y = arounds[(i * 2)+1]
-            if board.board[y][x]==[]:
-                return True
-            x, y = arounds[(i * 2) - 1]
-            if board.board[y][x] == []:
+            if check_surrounding(des_position, board, piece) \
+                    and check_surrounding(position, board, piece):
                 return True
     return False
 
 
+def spider_move(des_position, position, board, piece):
+    arounds = around(position)
+    first = []
+    if check_surrounding(position, board, piece):
+        for around_point in arounds:
+            if spider_checking(around_point, board, piece):
+                first.append(around_point)
+
+    second = []
+    for i in first:
+        arounds = around(i)
+        for around_point in arounds:
+            if spider_checking(around_point, board, piece) and not around_point in first:
+                second.append(around_point)
+
+    third = []
+    for i in second:
+        arounds = around(i)
+        for around_point in arounds:
+            if spider_checking(around_point, board, piece) and not around_point in second:
+                third.append(around_point)
+
+    return des_position in third
 
 
+
+def spider_checking(des_position, board, piece):
+    x, y = des_position
+    if board.board[y][x] == []:
+        if check_surrounding(des_position, board, piece):
+            around_des = around(des_position)
+            for point in around_des:
+                xx, yy = point
+                if not board.board[yy][xx] == []:
+                    return True
+    return False
+
+
+def check_surrounding(position, board, piece):
+    arounds = around(position)
+    for i in range(0, 3):
+        x, y = arounds[i * 2]
+        if board.board[y][x] == [] or board.board[y][x][-1] == piece:
+            x, y = arounds[(i * 2) + 1]
+            if board.board[y][x] == [] or board.board[y][x][-1] == piece:
+                return True
+            x, y = arounds[(i * 2) - 1]
+            if board.board[y][x] == [] or board.board[y][x][-1] == piece:
+                return True
+    return False

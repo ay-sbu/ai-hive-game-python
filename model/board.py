@@ -41,17 +41,23 @@ class Board(object):
         returns the normalized (x, y)
         """
         (x, y) = position
+        x_counter = 0
+        y_counter = 0
 
-        while x < 0:
+        while x < 0 or x_counter % 2 == 1:
             self.add_column(first=True)
             x += 1
-        while x >= len(self.board[0]):
+            x_counter +=1
+        while x >= len(self.board[0]) or x_counter % 2 == 1:
             self.add_column()
-        while y < 0:
+            x_counter +=1
+        while y < 0 or y_counter % 2 == 1:
             self.add_row(first=True)
             y += 1
-        while y >= len(self.board):
+            y_counter += 1
+        while y >= len(self.board) or y_counter % 2 == 1:
             self.add_row()
+            y_counter += 1
         return x, y
 
     def piece_in_game(self, piece):
