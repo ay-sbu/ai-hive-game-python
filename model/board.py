@@ -92,14 +92,14 @@ class Board(object):
                     point_near = self.board[y][x]
                     if not point_near == []:
                         if not point_near[-1][0] == color:
-                            return "the piece should not be next to other color"
+                            return "the piece should not be insert next to other color"
                         else:
                             flag = True
                 except:
                     pass
         if flag:
             return "ok"
-        return "the piece should be next to its color"
+        return "the piece should be insert next to its color"
 
     def give_position(self, direction, piece):
         """ return the position of direction than piece """
@@ -136,7 +136,7 @@ class Board(object):
 
         position = self.give_position(direction, ref_piece)
         x, y = self.resize(position)
-        if can_move(piece, position, self):
+        if can_move(piece, (x,y), self):
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
             self.board[yy][xx].remove(piece)
@@ -150,9 +150,11 @@ class Board(object):
         self.initial_turn -= 1
         message = "ok"
         x, y = self.resize(position)
-        self.board[y][x] = self.board[y][x] + [piece]
-        self.pieces[piece] = (x, y)
-        return message
+        if self.board[y][x] == []:
+            self.board[y][x] = self.board[y][x] + [piece]
+            self.pieces[piece] = (x, y)
+            return message
+        return "the cell must be empty for insert"
 
     def read_command(self, piece, direction, ref_piece):
         if self.piece_in_game(ref_piece):

@@ -122,3 +122,27 @@ bL1 w wQ1
 wL1 sw bQ1
 bL1 w wL1
 
+
+
+
+
+
+
+
+wA1
+bA1 se wA1
+wA2 nw wA1
+bB1 e bA1
+wB1 e wA2
+bS1 sw bA1
+wQ1 w wA1
+bQ1 e bS1
+wS1 w wA2
+bB1 ne bA1
+wB1 e wA1
+bQ1 e bA1
+wL1 e wA2
+bL1 e bQ1
+wS1 nw wA2
+wS1 ne wL1
+bL1 w bA1

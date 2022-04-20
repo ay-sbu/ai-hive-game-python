@@ -142,15 +142,13 @@ class GameController:
             print(massage)
             if b.end_game():
                 break
-            if massage == "ok":
-                print(massage)
-            else:
+            if not massage == "ok":
                 continue
 
             turn += 1
 
-            print(b.board)
-            print(b.pieces)
+            # print(b.board)
+            # print(b.pieces)
             
             print_board(b.board)
             
