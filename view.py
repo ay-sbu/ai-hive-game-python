@@ -25,12 +25,12 @@ def print_board(board):
         print("|")
         
         if i % 2 == 1:
-            print(" " * 2, end="")
+            print(" /", end='')
         
         for col in row:
             print(" \\ /", end='')
             
-        if i % 2 == 0:
+        if i % 2 == 0 and len(board) != i + 1:
             print(" \\", end="")
         
         print()
