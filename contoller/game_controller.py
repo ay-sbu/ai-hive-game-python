@@ -114,6 +114,8 @@ class GameController:
             turn = 0
         else:
             turn = 1
+            
+        print_board(b.board)
 
         # Game Loop
         while True:
