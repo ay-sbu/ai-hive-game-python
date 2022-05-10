@@ -1,10 +1,8 @@
 import copy
-from ctypes import resize
-import model.board
-from shutil import move
 
 
 def around(position):
+    """" return six point around the position as a list """
     x, y = position
     around_point = [(x + 1, y)]
     if y % 2 == 0:
@@ -23,35 +21,34 @@ def around(position):
 
 
 def can_move(piece, des_position, board):
+    """ check that movement is possible based on piece role """
     # it can be 'A', 'B', 'L', 'Q', 'S'
     piece_role = piece[1]
     new_board = copy.deepcopy(board)
 
     x, y = new_board.pieces.get(piece)  # old position of the piece
 
+    # only upper piece can move
     if not new_board.board[y][x][-1] == piece:
         return False
 
     new_board.board[y][x].remove(piece)
     del new_board.pieces[piece]
 
+    # if after movement node isn't empty continuity is ok
     if new_board.board[y][x] == []:
         if not check_continuity(new_board, (x, y)):
             return False
 
-    new_board = copy.deepcopy(board)
-    new_board.board[y][x].remove(piece)
-    del new_board.pieces[piece]
-
-    if piece_role == 'A':
+    if piece_role == 'A':    # Ant
         return ant_move(des_position, (x, y), new_board, piece)
-    elif piece_role == 'B':
+    elif piece_role == 'B':  # Beetle
         return beetle_move(des_position, (x, y), new_board, piece)
-    elif piece_role == 'L':
+    elif piece_role == 'L':  # Locust
         return locust_move(des_position, (x, y), board, piece)
-    elif piece_role == 'Q':
+    elif piece_role == 'Q':  # Queen
         return queen_move(des_position, (x, y), new_board, piece)
-    elif piece_role == 'S':
+    elif piece_role == 'S':  # Spider
         return spider_move(des_position, (x, y), new_board, piece)
     else:
         print("something wrong")
@@ -140,7 +137,7 @@ def locust_move(des_position, position, board, piece):
             # board.board[pos_y][pos_x].remove(piece)
             # board.board[y][x].append(piece)
             return True
-        
+
         if board.board[y][x] == []:
             return False
 
@@ -228,8 +225,8 @@ def spider_move(des_position, position, board, piece):
         arounds = around(i)
         for around_point in arounds:
             if spider_checking(around_point, board, piece) \
-                    and not around_point in first and around_point[0]>=0 \
-                    and around_point[1]>=0 and not around_point == position:
+                    and not around_point in first and around_point[0] >= 0 \
+                    and around_point[1] >= 0 and not around_point == position:
                 second.append(around_point)
 
     third = []
@@ -237,12 +234,11 @@ def spider_move(des_position, position, board, piece):
         arounds = around(i)
         for around_point in arounds:
             if spider_checking(around_point, board, piece) \
-                    and not around_point in second\
+                    and not around_point in second \
                     and not around_point in first:
                 third.append(around_point)
 
     return des_position in third
-
 
 
 def spider_checking(des_position, board, piece):
@@ -265,8 +261,8 @@ def check_surrounding(position, board, piece):
     for i in range(0, 6):
         try:
             x, y = arounds[i]
-            if board.board[y][x] == [] or board.board[y][x][-1] == piece  :
-                if i<5:
+            if board.board[y][x] == [] or board.board[y][x][-1] == piece:
+                if i < 5:
                     x, y = arounds[i + 1]
                 else:
                     x, y = arounds[0]

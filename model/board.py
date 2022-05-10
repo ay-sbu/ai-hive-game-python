@@ -7,7 +7,7 @@ class Board(object):
         # the board starts with one row and a column without pieces
         self.pieces = {}
         self.board = [[[]]]
-        self.initial_turn = 0
+        self.initial_turn = True
 
     def add_row(self, first=False):
         new_row = []
@@ -47,10 +47,10 @@ class Board(object):
         while x < 0 or x_counter % 2 == 1:
             self.add_column(first=True)
             x += 1
-            x_counter +=1
+            x_counter += 1
         while x >= len(self.board[0]) or x_counter % 2 == 1:
             self.add_column()
-            x_counter +=1
+            x_counter += 1
         while y < 0 or y_counter % 2 == 1:
             self.add_row(first=True)
             y += 1
@@ -64,30 +64,17 @@ class Board(object):
         """ return True if piece in game """
         return piece in self.pieces.keys()
 
-    @staticmethod
-    def around(position):
-        x, y = position
-        around_point = [(x + 1, y), (x - 1, y)]
-        if y % 2 == 0:
-            around_point.append((x, y - 1))
-            around_point.append((x, y + 1))
-            around_point.append((x - 1, y - 1))
-            around_point.append((x - 1, y + 1))
-        else:
-            around_point.append((x, y - 1))
-            around_point.append((x, y + 1))
-            around_point.append((x + 1, y - 1))
-            around_point.append((x + 1, y + 1))
-        return around_point
-
     def possible_insert(self, piece, position):
+        """
+        check that the piece do not insert next to other color
+        """
         around_point = self.around(position)
         color = piece[0]
 
         flag = False
         for point in around_point:
             x, y = point
-            if x>=0 and y>=0:
+            if x >= 0 and y >= 0:
                 try:
                     point_near = self.board[y][x]
                     if not point_near == []:
@@ -132,11 +119,12 @@ class Board(object):
         if not (color + "Q1") in self.pieces:
             return "queen has not entered the game"
 
+        # give the old position of piece
         xx, yy = self.pieces.get(piece)
 
         position = self.give_position(direction, ref_piece)
         x, y = self.resize(position)
-        if can_move(piece, (x,y), self):
+        if can_move(piece, (x, y), self):
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
             self.board[yy][xx].remove(piece)
@@ -145,9 +133,9 @@ class Board(object):
 
     def insert_piece(self, piece, position):
         message = self.possible_insert(piece, position)
-        if not message == "ok" and self.initial_turn < 0:
+        if not message == "ok" and not self.initial_turn :
             return message
-        self.initial_turn -= 1
+        self.initial_turn = False
         message = "ok"
         x, y = self.resize(position)
         if self.board[y][x] == []:
@@ -156,20 +144,11 @@ class Board(object):
             return message
         return "the cell must be empty for insert"
 
-    def read_command(self, piece, direction, ref_piece):
-        if self.piece_in_game(ref_piece):
-            if self.piece_in_game(piece):
-                return self.move(piece, direction, ref_piece)
-            else:
-                return self.insert_piece(piece, self.give_position(direction, ref_piece))
-        else:
-            return "ref_piece isn't in game"
-
     def end_game(self):
         try:
             white_win = True
-            x,y = self.pieces["bQ1"]
-            arounds = self.around((x,y))
+            x, y = self.pieces["bQ1"]
+            arounds = self.around((x, y))
             for neighbour in arounds:
                 x, y = neighbour
                 if self.board[y][x] == []:
@@ -194,3 +173,31 @@ class Board(object):
         except:
             pass
         return False
+
+    def read_command(self, piece, direction, ref_piece):
+        if self.piece_in_game(ref_piece):
+            if self.piece_in_game(piece):
+                return self.move(piece, direction, ref_piece)
+            else:
+                return self.insert_piece(piece, self.give_position(direction, ref_piece))
+        else:
+            return "ref_piece isn't in game"
+
+    @staticmethod
+    def around(position):
+        """" return six point around the position as a list """
+
+        x, y = position
+        around_point = [(x + 1, y), (x - 1, y)]
+        if y % 2 == 0:
+            around_point.append((x, y - 1))
+            around_point.append((x, y + 1))
+            around_point.append((x - 1, y - 1))
+            around_point.append((x - 1, y + 1))
+        else:
+            around_point.append((x, y - 1))
+            around_point.append((x, y + 1))
+            around_point.append((x + 1, y - 1))
+            around_point.append((x + 1, y + 1))
+        return around_point
+
