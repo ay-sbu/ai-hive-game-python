@@ -101,7 +101,7 @@ def beetle_move(des_position, position, board, piece):
     return False
 
 
-def locust_move(des_position, position, board, piece):
+def locust_move(des_position, position, board):
     pos_x, pos_y = position
     x, y = position
     des_x, des_y = des_position
@@ -127,77 +127,62 @@ def locust_move(des_position, position, board, piece):
         x_direction = 'r'
     elif x > des_x:
         x_direction = 'l'
-
-    # locust should insert in first blank position
-
+        
+        
     # move position to des_position Loop
-    while True:
-        # print("here", f'{y}, {x}')
-        if y == des_y and x == des_x:
-            # board.board[pos_y][pos_x].remove(piece)
-            # board.board[y][x].append(piece)
-            return True
+    
 
-        if board.board[y][x] == []:
-            return False
+    if y_direction == 'no':
 
-        # no_direction for y
-        if y_direction == 'no':
-
+        while True:
+            if y == des_y and x == des_x:
+                return True
+            if board.board[y][x] == []:
+                return False
             if x_direction == 'r':
-
                 x += 1
-
                 if x > des_x:
                     return False
-
             else:
-
                 x -= 1
-
                 if x < des_x:
                     return False
 
-        elif y_direction == 'r':
-
+    elif y_direction == 'r':
+        while True:
+            if y == des_y and x == des_x:
+                return True
+            if board.board[y][x] == []:
+                return False
             y += 1
-
             if y > des_y:
                 return False
-
             if y % 2 == 0:
                 if x_direction == 'r':
                     x += 1
-
                     if x > des_x:
                         return False
-
                 else:
-
                     x -= 1
-
                     if x < des_x:
                         return False
 
-        else:
-
+    else:
+        while True:    
+            if y == des_y and x == des_x:
+                return True
+            if board.board[y][x] == []:
+                return False   
             y -= 1
-
             if y < des_y:
                 return False
-
             if y % 2 == 1:
                 if x_direction == 'r':
-
                     x += 1
-
                     if x > des_x:
                         return False
-
                 else:
-
                     x -= 1
-
                     if x < des_x:
                         return False
 
