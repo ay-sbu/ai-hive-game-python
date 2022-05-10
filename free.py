@@ -1,20 +1,24 @@
 #from model import pieces
-from model.board import Board
-from model.pieces import check_surrounding
-from view import print_board
+# from model.board import Board
+# from model.pieces import check_surrounding
+# from view import print_board
+#
+# b = Board()
+#
+#
+#
+#
+# b.board = [[[], ["bQ1"], []],
+#             [[], [], ["wA1"]],
+#             [[], [], ["wA1"]],
+#          [[], ["bS2"], []]]
+#
+# print_board(b.board)
+# print(len(b.board[0]))
 
-b = Board()
 
 
 
-
-b.board = [[[], ["bQ1"], []],
-            [[], [], ["wA1"]],
-            [[], [], ["wA1"]],
-         [[], ["bS2"], []]]
-
-print_board(b.board)
-print(len(b.board[0]))
 
 
 
