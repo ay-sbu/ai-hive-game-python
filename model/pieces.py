@@ -45,7 +45,7 @@ def can_move(piece, des_position, board):
     elif piece_role == 'B':  # Beetle
         return beetle_move(des_position, (x, y), new_board, piece)
     elif piece_role == 'L':  # Locust
-        return locust_move(des_position, (x, y), board, piece)
+        return locust_move(des_position, (x, y), board)
     elif piece_role == 'Q':  # Queen
         return queen_move(des_position, (x, y), new_board, piece)
     elif piece_role == 'S':  # Spider
