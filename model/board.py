@@ -1,4 +1,6 @@
 from model.pieces import can_move
+from model.pieces import piece_naming
+
 
 
 class Board(object):
@@ -6,6 +8,8 @@ class Board(object):
     def __init__(self):
         # the board starts with one row and a column without pieces
         self.pieces = {}
+        self.black_pieces = {"queen": 1, "beetle": 2, "spider": 2, "locust": 3, "ant": 3}
+        self.white_pieces = {"queen": 1, "beetle": 2, "spider": 2, "locust": 3, "ant": 3}
         self.board = [[[]]]
         self.initial_turn = True
 
@@ -131,16 +135,29 @@ class Board(object):
             return "ok"
         return "movement is invalid"
 
-    def insert_piece(self, piece, position):
-        message = self.possible_insert(piece, position)
-        if not message == "ok" and not self.initial_turn :
-            return message
-        self.initial_turn = False
+    def insert_piece(self, piece, position, around=False, manual=False):
+        if not around and not manual:
+            message = self.possible_insert(piece, position)
+            if not message == "ok" and not self.initial_turn:
+                return message
+            self.initial_turn = False
         message = "ok"
         x, y = self.resize(position)
         if self.board[y][x] == []:
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
+            piece_name = piece_naming(piece)
+            if piece[0] == "b":
+                if self.black_pieces[piece_name] > 1:
+                    self.black_pieces.update({piece_name:self.black_pieces[piece_name]-1})
+                else:
+                    del self.black_pieces[piece_name]
+            else:
+                if self.white_pieces[piece_name] > 1:
+                    self.white_pieces.update({piece_name:self.white_pieces[piece_name]-1})
+                else:
+                    del self.white_pieces[piece_name]
+
             return message
         return "the cell must be empty for insert"
 

@@ -256,3 +256,16 @@ def check_surrounding(position, board, piece):
         except:
             pass
     return False
+
+
+def piece_naming(piece):
+    if piece[1] == 'Q':
+        return "queen"
+    if piece[1] == 'B':
+        return "beetle"
+    if piece[1] == 'S':
+        return "spider"
+    if piece[1] == 'L':
+        return "locust"
+    if piece[1] == 'A':
+        return "ant"
