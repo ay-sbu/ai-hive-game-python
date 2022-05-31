@@ -43,12 +43,15 @@ class MinimaxTree:
         best = self.best_child()
 
 
-def possible_nodes(board):
-    pass
+
+    def possible_state(self):
+        possibles_state = [possible_movement(self.root), possible_insert(self.root, "b")]
+        return possibles_state
 
 
-def eval(board):
-    return len(board)
+
+
+
 
 
 def possible_movement(self):
@@ -123,3 +126,13 @@ def make_state(self, piece_name, position, color):
         state.insert_piece(color + "Q1", position, True, True)
 
     return state
+
+
+def possible_nodes(board):
+    pass
+
+
+def eval(board):
+    return len(board)
+
+
