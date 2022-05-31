@@ -112,7 +112,7 @@ class GameController:
                 continue
             around = self.b.around(self.b.pieces[piece])
             for position in around:
-                x, y = position
+                x, y = self.b.resize(position)
                 if not self.b.board[y][x] == []:
                     continue
                 if self.b.possible_insert(piece, position) == "ok":

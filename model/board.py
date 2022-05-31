@@ -147,7 +147,7 @@ class Board(object):
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
             piece_name = piece_naming(piece)
-            if piece[0] == "b":
+            if piece[0] == "b":  # todo : remove this condition from here and build function
                 if self.black_pieces[piece_name] > 1:
                     self.black_pieces.update({piece_name:self.black_pieces[piece_name]-1})
                 else:
