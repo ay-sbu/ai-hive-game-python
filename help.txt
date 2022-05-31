@@ -8,12 +8,12 @@ main.py
 	- model
 		board.py
 		- Pieces
-			#- ant.py 	مورچه
-			- queen.py 	زنبور
-			- beetle.py سوسک
-		    #- locust.py ملخ
-			- spider.py عنکبوت
-		
+			- 1 queen.py 	زنبور
+			- 2 beetle.py سوسک
+			- 2 spider.py عنکبوت
+		    - 3 locust.py ملخ
+			- 3 ant.py 	مورچه
+
 	- controller
 		input_controller.py
 		display_controller.py
