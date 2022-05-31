@@ -138,7 +138,7 @@ class Board(object):
     def insert_piece(self, piece, position, around=False, manual=False):
         if not around and not manual:
             message = self.possible_insert(piece, position)
-            if not message == "ok" and not self.initial_turn:
+            if not message == "ok" : #and not self.initial_turn
                 return message
             self.initial_turn = False
         message = "ok"

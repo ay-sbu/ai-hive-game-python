@@ -74,9 +74,15 @@ class GameController:
                 print_board(self.b.board)
 
 
-    def ai_turn(self):
+    def ai_turn(self,color="b"):
+
+        print("\n------- HiveGame ------- ")
+        print("$ turn : ", end='')
+        print("white") if color == "w" else print("black")
+        print("$ AI : ")
+
         possible_state = []
-        possible_state = self.possible_insert("b")
+        possible_state = self.possible_insert(color)
         self.b = possible_state[0]
 
 
@@ -151,7 +157,7 @@ class GameController:
                 state.insert_piece(color + "B1", position, True, True)
         else:
             state.insert_piece(color + "Q1", position, True, True)
-        print
+
         return state
 
 
