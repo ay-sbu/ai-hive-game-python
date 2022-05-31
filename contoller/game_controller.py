@@ -1,3 +1,4 @@
+from minimax_tree.minimax_tree import MinimaxTree
 from view import print_board
 from model.board import Board
 import copy
@@ -7,6 +8,7 @@ import copy
 class GameController:
     turn = 0
     b = Board()
+    minimax = MinimaxTree(b)
 
     def start(self):
 
@@ -74,91 +76,14 @@ class GameController:
                 print_board(self.b.board)
 
 
-    def ai_turn(self,color="b"):
+    def ai_turn(self, color="b"):
 
         print("\n------- HiveGame ------- ")
         print("$ turn : ", end='')
         print("white") if color == "w" else print("black")
         print("$ AI : ")
 
-        possible_state = []
-        possible_state = self.possible_insert(color)
-        self.b = possible_state[0]
-
-
-    def possible_movement(self):
-        pass
-
-    def possible_insert(self, color):
-        possible_state = []
-
-
-        if self.turn == 0:
-            for possible_piece in self.b.black_pieces.keys() if color == "b" else self.b.white_pieces.keys():
-                possible_state.append(self.make_state(possible_piece, (0,0), color))
-                return possible_state
-        if self.turn == 1:
-            for possible_piece in self.b.black_pieces.keys() if color == "b" else self.b.white_pieces.keys():
-                possible_state.append(self.make_state(possible_piece, (1, 0), color))
-
-            return possible_state
-
-        flag = False
-        if (self.turn == 7 or self.turn == 6) and not (color+"Q1") in self.b.pieces:
-            flag = True
-
-        for piece in self.b.pieces:
-            if piece[0] == 'w' if color == "b" else "b":
-                continue
-            around = self.b.around(self.b.pieces[piece])
-            for position in around:
-                x, y = self.b.resize(position)
-                if not self.b.board[y][x] == []:
-                    continue
-                if self.b.possible_insert(piece, position) == "ok":
-                    if flag:
-                        possible_state.append(self.make_state("queen", position, color))
-                        return possible_state
-
-                    for possible_piece in self.b.black_pieces.keys() if color == "b" else self.b.white_pieces.keys():
-                        possible_state.append(self.make_state(possible_piece, position, color))
-
-        return possible_state
-
-
-
-    def make_state(self, piece_name, position, color):
-        state = copy.deepcopy(self.b)
-        if piece_name == "ant":
-            if color+"A1" in state.pieces.keys():
-                if color+"A2" in state.pieces.keys():
-                    state.insert_piece(color + "A3", position, True, True)
-                else:
-                    state.insert_piece(color + "A2", position, True, True)
-            else:
-                state.insert_piece(color + "A1", position, True, True)
-        elif piece_name == "locust":
-            if color+"L1" in state.pieces.keys():
-                if color+"L2" in state.pieces.keys():
-                    state.insert_piece(color + "L3", position, True, True)
-                else:
-                    state.insert_piece(color + "L2", position, True, True)
-            else:
-                state.insert_piece(color + "L1", position, True, True)
-        elif piece_name == "spider":
-            if color+"S1" in state.pieces.keys():
-                state.insert_piece(color + "S2", position, True, True)
-            else:
-                state.insert_piece(color + "S1", position, True, True)
-        elif piece_name == "beetle":
-            if color + "B1" in state.pieces.keys():
-                state.insert_piece(color + "B2", position, True, True)
-            else:
-                state.insert_piece(color + "B1", position, True, True)
-        else:
-            state.insert_piece(color + "Q1", position, True, True)
-
-        return state
+        self.b = self.minimax.make_and_update_last_depth()
 
 
     def print_menu(self):
