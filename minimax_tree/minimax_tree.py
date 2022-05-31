@@ -1,6 +1,7 @@
 import copy
 import string
 from minimax_tree.node import Node
+from model.pieces import initial_condition_for_move, ant_move, piece_naming, beetle_move, spider_move
 
 
 class MinimaxTree:
@@ -45,7 +46,7 @@ class MinimaxTree:
 
 
     def possible_state(self):
-        possibles_state = [possible_movement(self.root), possible_insert(self.root, "b")]
+        possibles_state = [possible_movement(self.root, "b"), possible_insert(self.root, "b")]
         return possibles_state
 
 
@@ -54,8 +55,50 @@ class MinimaxTree:
 
 
 
-def possible_movement(self):
-    pass
+def possible_movement(self,color):
+    possible_move = []
+
+    if "bQ1" not in self.b.pieces if color == "b" else "wQ1" not in self.b.pieces:
+        return possible_move
+    for piece in self.b.pieces:
+        if not piece[0] == color:
+            continue
+        new_board = initial_condition_for_move(piece, self.b.board)
+        # new_board can be False or if continuity is True should be new board
+
+        if new_board is False:
+            continue
+
+        role = piece[1]
+        if role == "Q" :
+            around = new_board.around(new_board.pieces[piece])
+            for position in around:
+                x, y = new_board.resize(position)
+                if ant_move((x,y), self.b.pieces[piece], new_board, piece):
+                    possible_move.append(make_state_move(self, piece, (x,y)))
+        elif role == "B":
+            around = new_board.around(new_board.pieces[piece])
+            for position in around:
+                x, y = new_board.resize(position)
+                if beetle_move((x, y), self.b.pieces[piece], new_board, piece):
+                    possible_move.append(make_state_move(self, piece, (x, y)))
+        elif role == "A":
+            for second_piece in new_board.pieces:
+                around = new_board.around(new_board.pieces[second_piece])
+                for position in around:
+                    x, y = new_board.resize(position)
+                    if not new_board.board[y][x] == []:
+                        continue
+                    if ant_move((x, y), self.b.pieces[piece], new_board, piece):
+                        possible_move.append(make_state_move(self, piece, (x, y)))
+        elif role == "S":
+            possible_positions = spider_move((0,0), self.b.pieces[piece], new_board, piece, True)
+            for possible_position in possible_positions:
+                possible_move.append(make_state_move(self, piece, possible_position))
+        else:
+
+            # locust move
+            pass
 
 
 def possible_insert(self, color):
@@ -85,16 +128,37 @@ def possible_insert(self, color):
                 continue
             if self.b.possible_insert(piece, position) == "ok":
                 if flag:
-                    possible_state.append(self.make_state("queen", position, color))
+                    possible_state.append(make_state_insert(self,"queen", position, color))
                     return possible_state
 
                 for possible_piece in self.b.black_pieces.keys() if color == "b" else self.b.white_pieces.keys():
-                    possible_state.append(self.make_state(possible_piece, position, color))
+                    possible_state.append(make_state_insert(self, possible_piece, position, color))
 
     return possible_state
 
 
-def make_state(self, piece_name, position, color):
+def make_state_move(self, piece, position):
+    state = copy.deepcopy(self.b)
+    x, y = position
+
+    state.board[y][x] = self.board[y][x] + [piece]
+    state.pieces[piece] = (x, y)
+    piece_name = piece_naming(piece)
+    if piece[0] == "b":  # todo : remove this condition from here and build function
+        if self.black_pieces[piece_name] > 1:
+            self.black_pieces.update({piece_name: self.black_pieces[piece_name] - 1})
+        else:
+            del self.black_pieces[piece_name]
+    else:
+        if self.white_pieces[piece_name] > 1:
+            self.white_pieces.update({piece_name: self.white_pieces[piece_name] - 1})
+        else:
+            del self.white_pieces[piece_name]
+
+    return state
+
+
+def make_state_insert(self, piece_name, position, color):
     state = copy.deepcopy(self.b)
     if piece_name == "ant":
         if color + "A1" in state.pieces.keys():
