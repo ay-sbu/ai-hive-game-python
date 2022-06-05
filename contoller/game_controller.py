@@ -8,7 +8,7 @@ import copy
 class GameController:
     turn = 0
     b = Board()
-    minimax = MinimaxTree(b)
+    minimax = None
 
     def start(self):
 
@@ -31,6 +31,8 @@ class GameController:
             self.turn = 1
 
         print_board(self.b.board)
+
+        self.minimax = MinimaxTree(self.b)
 
         # Game Loop
         while True:
@@ -59,21 +61,14 @@ class GameController:
                 if not massage == "ok":
                     continue
 
-                self.turn += 1
-
-                # print(b.board)
-                # print(b.pieces)
-
-                print_board(self.b.board)
-
             else:
                 self.ai_turn()
-                self.turn += 1
 
-                # print(b.board)
-                # print(b.pieces)
 
-                print_board(self.b.board)
+            self.turn += 1
+            # print(b.board)
+            # print(b.pieces)
+            print_board(self.b.board)
 
 
     def ai_turn(self, color="b"):
@@ -83,7 +78,7 @@ class GameController:
         print("white") if color == "w" else print("black")
         print("$ AI : ")
 
-        self.b = self.minimax.make_and_update_last_depth()
+        self.b = self.minimax.update_last_depth(self.turn)
 
 
     def print_menu(self):
