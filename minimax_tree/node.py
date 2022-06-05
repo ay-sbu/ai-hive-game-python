@@ -5,8 +5,5 @@ class Node:
         self.children = children
         self.parent = parent
         self.turn = turn
-        self.score = None
-        self.alpha = -1000
-        self.beta = 10000
         
     

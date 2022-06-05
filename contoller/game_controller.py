@@ -1,14 +1,14 @@
 from minimax_tree.minimax_tree import MinimaxTree
 from view import print_board
 from model.board import Board
-import copy
-
 
 
 class GameController:
     turn = 0
     b = Board()
-    minimax = None
+
+    def __init__(self):
+        self.minimax = None
 
     def start(self):
 
@@ -23,7 +23,7 @@ class GameController:
             self.good_bye()
 
         command.strip()
-        self.b.insert_piece(command, (0,0), True, True)
+        self.b.insert_piece(command, (0, 0), True, True)
 
         if self.turn == 1:
             self.turn = 0
@@ -55,21 +55,18 @@ class GameController:
                     continue
 
                 massage = self.b.read_command(commands[0], commands[1], commands[2])
-                print(massage)
-                if self.b.end_game():
-                    break
                 if not massage == "ok":
                     continue
+                if self.b.end_game():
+                    break
+
+                self.minimax.update_root(self.b)
 
             else:
                 self.ai_turn()
 
-
             self.turn += 1
-            # print(b.board)
-            # print(b.pieces)
             print_board(self.b.board)
-
 
     def ai_turn(self, color="b"):
 
@@ -78,8 +75,7 @@ class GameController:
         print("white") if color == "w" else print("black")
         print("$ AI : ")
 
-        self.b = self.minimax.update_last_depth(self.turn)
-
+        self.b = self.minimax.give_last_state()
 
     def print_menu(self):
         print("\n")

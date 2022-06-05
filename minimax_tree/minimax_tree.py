@@ -5,79 +5,89 @@ from node import Node
 from model.pieces import initial_condition_for_move, ant_move, piece_naming, beetle_move, spider_move, queen_move
 from view import print_board
 
+MIN = -100
+MAX = -MIN
+
 
 class MinimaxTree:
     last_depth = []
     depth_limit_checking = 3
-    turn = 0
 
     def __init__(self, board):
-        print(f'root is {board}')
-        self.node = Node(board, [], None, 0)
-        self.last_depth.append(self.node)
-        # self.first_tree_making()
+        self.root = Node(board, [], None, 0)
+        self.next_state = None
+        self.this_turn = 0
 
     def minimax(self, node, alpha, beta):
-        if node.turn ==
+        flag = False
+        if self.root == node:
+            flag = True
 
-    def make_tree(self, turn):
+        if node.turn == self.this_turn + self.depth_limit_checking:
+            return heuristic(node)
 
-        old_last_depth = copy.deepcopy(self.last_depth)
-        self.last_depth = []
-        for node in old_last_depth:
-            children = possible_state(node)
-            if not children:
-                continue
-            for child in children:
-                new_node = Node(child, [], node, turn + 7)
-                node.children.append(new_node)
-                self.last_depth.append(new_node)
+        elif node.turn % 2 == 0:  # maximizing player
+            if not node.children:
+                update_last_depth(node)
 
-    def update_last_depth(self, turn):
-        node_to_expand = self.last_depth.pop()
+            best = MIN
 
-        children = possible_state(node_to_expand)
-        new_nodes = []
-        for child in children:
-            new_node = Node(child, [], node_to_expand, node_to_expand.turn)
-            node_to_expand.children.append(new_node)
-            new_nodes.append(new_node)
+            for child in node.children:
+                val = self.minimax(child, alpha, beta)
+                if flag and val > best:
+                    self.next_state = child
+                best = max(best, val)
+                alpha = max(alpha, best)
 
-        new_nodes.reverse()
-        self.last_depth.extend(new_nodes)
+                # Alpha Beta Pruning
+                if beta <= alpha:
+                    break
 
-        if node_to_expand.turn + 1 != turn + self.depth_limit_checking:
-            self.update_last_depth(turn)
-            return
+            return best
 
-        for last_node in self.last_depth:
-            if last_node.turn == turn + self.depth_limit_checking:
-                last_node.score = heuristic(last_node)
+        else:  # minimizing player
+            if not node.children:
+                update_last_depth(node)
+
+            best = MAX
+
+            for child in node.children:
+                val = self.minimax(child, alpha, beta)
+                if flag and val < best:
+                    self.next_state = child
+                best = min(best, val)
+                beta = min(beta, best)
+
+                # Alpha Beta Pruning
+                if beta <= alpha:
+                    break
+
+            return best
+
+    def give_next_state(self):
+        self.this_turn += 1
+        self.minimax(self.root, MIN, MAX)
+        self.root = self.next_state
+        return self.next_state
+
+    def update_root(self, board):
+        self.this_turn += 1
+
+        for child in self.root.children:
+            if child.board == board:  # todo: check '==' for compare two board object
+                self.root = child
+                return
+
+        self.root = Node(board, [], None, self.root.turn + 1)
 
 
-            else:
-                break
-
-        print(len(self.last_depth))
-        # self.print_tree()
-        return self.last_depth[0].board
-
-    def print_tree(self):
-        for node in self.last_depth:
-            print_board(node.board.board)
-            print("\n#####################################\n")
-    # def best_child(self):
-    #     max = 0
-    #     for node in self.last_depth:
-    #         score = eval(node)
-    #         if score > max:
-    #             best_node = node
-    #             max = score
-    #
-    #     return best_node
-    #
-    # def ai_move(self) -> string:
-    #     best = self.best_child()
+def update_last_depth(node):
+    children = possible_state(node)
+    new_nodes = []
+    for child in children:
+        new_node = Node(child, [], node, node.turn + 1)
+        node.children.append(new_node)
+        new_nodes.append(new_node)
 
 
 def possible_state(node):
