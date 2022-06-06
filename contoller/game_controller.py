@@ -75,7 +75,7 @@ class GameController:
         print("white") if color == "w" else print("black")
         print("$ AI : ")
 
-        self.b = self.minimax.give_last_state()
+        self.b = self.minimax.give_next_state()
 
     def print_menu(self):
         print("\n")

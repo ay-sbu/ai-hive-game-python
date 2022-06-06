@@ -1,16 +1,14 @@
 import copy
 from random import random
 
-from node import Node
+from minimax_tree.node import Node
 from model.pieces import initial_condition_for_move, ant_move, piece_naming, beetle_move, spider_move, queen_move
-from view import print_board
 
 MIN = -100
 MAX = -MIN
 
 
 class MinimaxTree:
-    last_depth = []
     depth_limit_checking = 3
 
     def __init__(self, board):
@@ -68,7 +66,7 @@ class MinimaxTree:
         self.this_turn += 1
         self.minimax(self.root, MIN, MAX)
         self.root = self.next_state
-        return self.next_state
+        return self.next_state.board
 
     def update_root(self, board):
         self.this_turn += 1
@@ -88,26 +86,26 @@ def update_last_depth(node):
         new_node = Node(child, [], node, node.turn + 1)
         node.children.append(new_node)
         new_nodes.append(new_node)
+    return new_nodes
 
 
 def possible_state(node):
     possibles_state = []
-    # x = possible_movement(node, "b")
-    # print(x)
-    # possibles_state.extend(x)
+    # possibles_state.extend(possible_movement(node, "b"))
     possibles_state.extend(possible_insert(node, "b"))
     return possibles_state
 
 
 def possible_movement(node, color):
     possible_move = []
-    print(node.turn)
+
     if "bQ1" not in node.board.pieces if color == "b" else "wQ1" not in node.board.pieces:
         return possible_move
     for piece in node.board.pieces:
-        piece_position = node.board.pieces[piece]
         if not piece[0] == color:
             continue
+
+        piece_position = node.board.pieces[piece]
         new_board = initial_condition_for_move(piece, node.board)
         # new_board can be False or if continuity is True should be new board
 
@@ -118,12 +116,20 @@ def possible_movement(node, color):
         if role == "Q":
             around = new_board.around(piece_position)
             for position in around:
-                x, y = new_board.resize(position)
+                x, y = position
                 around_around = new_board.around((x, y))
+
+                around_around = around_around.remove(piece_position)
+
                 for position_position in around_around:
-                    if not new_board.board[y][x] == []:
-                        if queen_move((x, y), node.board.pieces[piece], new_board, piece):
-                            possible_move.append(make_state_move(new_board, piece, (x, y)))
+                    xx, yy = position_position
+                    try:
+                        if not new_board.board[yy][xx] == []:
+                            if queen_move((x, y), node.board.pieces[piece], new_board, piece):
+                                possible_move.append(make_state_move(new_board, piece, (x, y)))
+                    except:
+                        pass
+
         elif role == "B":
             around = new_board.around(piece_position)
             for position in around:
@@ -155,10 +161,6 @@ def possible_insert(node, color):
 
     if node.turn == 0:
         for possible_piece in node.board.black_pieces.keys() if color == "b" else node.board.white_pieces.keys():
-            possible_state.append(make_state_insert(node.board, possible_piece, (0, 0), color))
-        return possible_state
-    if node.turn == 1:
-        for possible_piece in node.board.black_pieces.keys() if color == "b" else node.board.white_pieces.keys():
             possible_state.append(make_state_insert(node.board, possible_piece, (1, 0), color))
 
         return possible_state
@@ -188,7 +190,7 @@ def possible_insert(node, color):
 
 def make_state_move(board, piece, position):
     state = copy.deepcopy(board)
-    x, y = (position)
+    x, y = position
 
     state.board[y][x] = board.board[y][x] + [piece]
     state.pieces[piece] = (x, y)

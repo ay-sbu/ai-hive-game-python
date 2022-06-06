@@ -2,7 +2,6 @@ from model.pieces import can_move
 from model.pieces import piece_naming
 
 
-
 class Board(object):
 
     def __init__(self):
@@ -12,6 +11,8 @@ class Board(object):
         self.white_pieces = {"queen": 1, "beetle": 2, "spider": 2, "locust": 3, "ant": 3}
         self.board = [[[]]]
         self.initial_turn = True
+        self.add_column()
+        self.add_row()
 
     def add_row(self, first=False):
         new_row = []
@@ -38,6 +39,16 @@ class Board(object):
         else:
             for row in self.board:
                 row.append([])
+
+    def resize_page(self, x, y):
+        if y == 0:
+            self.add_row(True)
+        elif x == len(self.board[0]) - 1:
+            self.add_row()
+        if x == 0:
+            self.add_column(True)
+        else:
+            self.add_column()
 
     def resize(self, position):
         """
@@ -132,13 +143,14 @@ class Board(object):
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
             self.board[yy][xx].remove(piece)
+            self.resize_page(x, y)
             return "ok"
         return "movement is invalid"
 
     def insert_piece(self, piece, position, around=False, manual=False):
         if not around and not manual:
             message = self.possible_insert(piece, position)
-            if not message == "ok" : #and not self.initial_turn
+            if not message == "ok":  # and not self.initial_turn
                 return message
             self.initial_turn = False
         message = "ok"
@@ -146,15 +158,16 @@ class Board(object):
         if self.board[y][x] == []:
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
+            self.resize_page(x, y)
             piece_name = piece_naming(piece)
             if piece[0] == "b":  # todo : remove this condition from here and build function
                 if self.black_pieces[piece_name] > 1:
-                    self.black_pieces.update({piece_name:self.black_pieces[piece_name]-1})
+                    self.black_pieces.update({piece_name: self.black_pieces[piece_name] - 1})
                 else:
                     del self.black_pieces[piece_name]
             else:
                 if self.white_pieces[piece_name] > 1:
-                    self.white_pieces.update({piece_name:self.white_pieces[piece_name]-1})
+                    self.white_pieces.update({piece_name: self.white_pieces[piece_name] - 1})
                 else:
                     del self.white_pieces[piece_name]
 
@@ -217,4 +230,3 @@ class Board(object):
             around_point.append((x + 1, y - 1))
             around_point.append((x + 1, y + 1))
         return around_point
-
