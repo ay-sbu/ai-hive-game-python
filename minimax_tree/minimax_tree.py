@@ -9,7 +9,7 @@ MAX = -MIN
 
 
 class MinimaxTree:
-    depth_limit_checking = 3
+    depth_limit_checking = 1
 
     def __init__(self, board):
         self.root = Node(board, [], None, 0)
@@ -91,7 +91,7 @@ def update_last_depth(node):
 
 def possible_state(node):
     possibles_state = []
-    # possibles_state.extend(possible_movement(node, "b"))
+    possibles_state.extend(possible_movement(node, "b"))
     possibles_state.extend(possible_insert(node, "b"))
     return possibles_state
 
@@ -113,13 +113,12 @@ def possible_movement(node, color):
             continue
 
         role = piece[1]
+
         if role == "Q":
             around = new_board.around(piece_position)
             for position in around:
                 x, y = position
                 around_around = new_board.around((x, y))
-
-                around_around = around_around.remove(piece_position)
 
                 for position_position in around_around:
                     xx, yy = position_position
@@ -133,9 +132,17 @@ def possible_movement(node, color):
         elif role == "B":
             around = new_board.around(piece_position)
             for position in around:
-                x, y = new_board.resize(position)
-                if beetle_move((x, y), node.board.pieces[piece], new_board, piece):
-                    possible_move.append(make_state_move(new_board, piece, (x, y)))
+                x, y = position
+                around_around = new_board.around((x, y))
+
+                for position_position in around_around:
+                    xx, yy = position_position
+                    try:
+                        if not new_board.board[yy][xx] == []:
+                            if beetle_move((x, y), node.board.pieces[piece], new_board, piece):
+                                possible_move.append(make_state_move(new_board, piece, (x, y)))
+                    except:
+                        pass
         elif role == "A":
             for second_piece in new_board.pieces:
                 around = new_board.around(new_board.pieces[second_piece])
