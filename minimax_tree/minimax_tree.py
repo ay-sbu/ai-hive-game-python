@@ -147,7 +147,7 @@ def possible_movement(node, color):
             for second_piece in new_board.pieces:
                 around = new_board.around(new_board.pieces[second_piece])
                 for position in around:
-                    x, y = new_board.resize(position)
+                    x, y = position
                     if not new_board.board[y][x] == []:
                         continue
                     if ant_move((x, y), node.board.pieces[piece], new_board, piece):
