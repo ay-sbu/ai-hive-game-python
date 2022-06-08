@@ -161,7 +161,7 @@ def possible_movement(node, color):
         # we move the locust by 6 whiles
         else:
             # no/l
-            x,y = position
+            x,y = piece_position
             if new_board.board[y][x - 1] != []:
                 x -= 1
                 while True:
@@ -172,7 +172,7 @@ def possible_movement(node, color):
                         break
                 
             # no/r
-            x,y = position
+            x,y = piece_position
             if new_board.board[y][x + 1] != []:
                 x += 1
                 while True:
@@ -183,7 +183,7 @@ def possible_movement(node, color):
                         break
             
             # l/l
-            x,y = position
+            x,y = piece_position
             if new_board.board[y - 1][(x - 1) if y % 2 == 1 else x] != []:
                 y -= 1
                 if y % 2 == 1: x -= 1
@@ -197,7 +197,7 @@ def possible_movement(node, color):
                         break
             
             # l/r
-            x,y = position
+            x,y = piece_position
             if new_board.board[y - 1][(x + 1) if y % 2 == 1 else x] != []:
                 y -= 1
                 if y % 2 == 1: x += 1
@@ -211,7 +211,7 @@ def possible_movement(node, color):
                         break
             
             # r/l
-            x,y = position
+            x,y = piece_position
             if new_board.board[y + 1][(x - 1) if y % 2 == 0 else x] != []:
                 y += 1
                 if y % 2 == 0: x -= 1
@@ -225,7 +225,7 @@ def possible_movement(node, color):
                         break
             
             # r/r
-            x,y = position
+            x,y = piece_position
             if new_board.board[y + 1][(x + 1) if y % 2 == 0 else x] != []:
                 y += 1
                 if y % 2 == 0: x += 1
