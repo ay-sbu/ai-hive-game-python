@@ -91,7 +91,12 @@ def update_last_depth(node):
 
 def possible_state(node):
     possibles_state = []
-    possibles_state.extend(possible_movement(node, "b"))
+    x = possible_movement(node, "b")
+    if x == None:
+        for row in node.board.board:
+            print(row)
+    print(x)
+    possibles_state.extend(x)
     possibles_state.extend(possible_insert(node, "b"))
     return possibles_state
 
@@ -160,7 +165,7 @@ def possible_movement(node, color):
 
             # locust move
             pass
-        return possible_move
+    return possible_move
 
 
 def possible_insert(node, color):
@@ -181,7 +186,7 @@ def possible_insert(node, color):
             continue
         around = node.board.around(node.board.pieces[piece])
         for position in around:
-            x, y = node.board.resize(position)
+            x, y = position
             if not node.board.board[y][x] == []:
                 continue
             if node.board.possible_insert(piece, position) == "ok":

@@ -14,7 +14,7 @@ b.board = [[[], ["bQ1"], []],
          [[], ["bS2"], []]]
 
 # print_board(b.board)
-print(b.board[-1][-1])
+print(b.board)
 
 
 

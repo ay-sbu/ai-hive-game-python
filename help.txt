@@ -146,3 +146,15 @@ bL1 e bQ1
 wS1 nw wA2
 wS1 ne wL1
 bL1 w bA1
+
+
+
+
+
+
+
+
+##################  AI input
+
+wA1
+wQ1 w wA1
