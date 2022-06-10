@@ -2,7 +2,7 @@ import copy
 from random import random
 
 from minimax_tree.node import Node
-from model.pieces import initial_condition_for_move, ant_move, piece_naming, beetle_move, spider_move, queen_move
+from model.pieces import around, check_continuity, initial_condition_for_move, ant_move, piece_naming, beetle_move, spider_move, queen_move
 
 MIN = -100
 MAX = -MIN
@@ -161,11 +161,89 @@ def possible_movement(node, color):
             possible_positions = spider_move((0, 0), node.board.pieces[piece], new_board, piece, True)
             for possible_position in possible_positions:
                 possible_move.append(make_state_move(new_board, piece, possible_position))
+        
+        # locust_possible_moves 6 direction(y/x): (no/l) (no/r) (l/l) (l/r) (r/l) (r/r) 
+        # we move the locust by 6 whiles
         else:
-
-            # locust move
-            pass
-    return possible_move
+            # no/l
+            x,y = piece_position
+            if new_board.board[y][x - 1] != []:
+                x -= 1
+                while True:
+                    x -= 1
+                    if new_board.board[y][x] == []:
+                        possible_position = (x, y)
+                        possible_move.append(make_state_move(new_board, piece, possible_position))
+                        break
+                
+            # no/r
+            x,y = piece_position
+            if new_board.board[y][x + 1] != []:
+                x += 1
+                while True:
+                    x += 1
+                    if new_board.board[y][x] == []:
+                        possible_position = (x, y)
+                        possible_move.append(make_state_move(new_board, piece, possible_position))
+                        break
+            
+            # l/l
+            x,y = piece_position
+            if new_board.board[y - 1][(x - 1) if y % 2 == 1 else x] != []:
+                y -= 1
+                if y % 2 == 1: x -= 1
+                while True:
+                    y -= 1
+                    if y % 2 == 1:
+                        x -= 1
+                    if new_board.board[y][x] == []:
+                        possible_position = (x, y)
+                        possible_move.append(make_state_move(new_board, piece, possible_position))
+                        break
+            
+            # l/r
+            x,y = piece_position
+            if new_board.board[y - 1][(x + 1) if y % 2 == 1 else x] != []:
+                y -= 1
+                if y % 2 == 1: x += 1
+                while True:
+                    y -= 1
+                    if y % 2 == 1:
+                        x += 1
+                    if new_board.board[y][x] == []:
+                        possible_position = (x, y)
+                        possible_move.append(make_state_move(new_board, piece, possible_position))
+                        break
+            
+            # r/l
+            x,y = piece_position
+            if new_board.board[y + 1][(x - 1) if y % 2 == 0 else x] != []:
+                y += 1
+                if y % 2 == 0: x -= 1
+                while True:
+                    y += 1
+                    if y % 2 == 0:
+                        x -= 1
+                    if new_board.board[y][x] == []:
+                        possible_position = (x, y)
+                        possible_move.append(make_state_move(new_board, piece, possible_position))
+                        break
+            
+            # r/r
+            x,y = piece_position
+            if new_board.board[y + 1][(x + 1) if y % 2 == 0 else x] != []:
+                y += 1
+                if y % 2 == 0: x += 1
+                while True:
+                    y += 1
+                    if y % 2 == 0:
+                        x += 1
+                    if new_board.board[y][x] == []:
+                        possible_position = (x, y)
+                        possible_move.append(make_state_move(new_board, piece, possible_position))
+                        break
+                    
+        return possible_move
 
 
 def possible_insert(node, color):
@@ -244,5 +322,139 @@ def make_state_insert(board, piece_name, position, color):
     return state
 
 
+
 def heuristic(node):
-    return int(random() * 10)
+    if node.turn < 6:
+        return 1
+    arround_white_queen = around(node.board.pieces.get("wQ1")) 
+    arround_black_queen = around(node.board.pieces.get("bQ1"))
+    p1 = arround_black_queen - arround_white_queen
+    c1 = 80
+    
+    white_active_ants = active_ants(node, 'w')
+    black_active_ants = active_ants(node, 'b')
+    p2 = white_active_ants - black_active_ants
+    c2 = 50
+    
+    white_in_game_ants = 3 - node.board.white_pieces["ant"]
+    black_in_game_ants = 3 - node.board.black_pieces["ant"]
+    p3 = white_in_game_ants - black_in_game_ants
+    c3 = 30
+    
+    white_locusts_possible_moves = locusts_moves(node, 'w')
+    black_locusts_possible_moves = locusts_moves(node, 'b')
+    p4 = white_locusts_possible_moves - black_locusts_possible_moves
+    c4 = 20
+    
+    # spider is a stupid piece so we don't consider it :)
+    
+    score = (c1 * p1) + (c2 * p2) + (c3 * p3) + (c4 * p4)
+    
+    return  score
+
+# todo: I think possible_movement can be decomposite to checking eache piece
+def locusts_moves(node, color):
+    possible_move = []
+    for piece in node.board.pieces:
+        if piece[0] != color or piece[1] != "L":
+            continue
+        
+        piece_position = node.board.pieces[piece]
+        new_board = initial_condition_for_move(piece, node.board)
+        # new_board can be False or if continuity is True should be new board
+        
+        if new_board is False:
+            continue
+        
+        x,y = piece_position
+        if new_board.board[y][x - 1] != []:
+            x -= 1
+            while True:
+                x -= 1
+                if new_board.board[y][x] == []:
+                    possible_position = (x, y)
+                    possible_move.append(make_state_move(new_board, piece, possible_position))
+                    break
+            
+        # no/r
+        x,y = piece_position
+        if new_board.board[y][x + 1] != []:
+            x += 1
+            while True:
+                x += 1
+                if new_board.board[y][x] == []:
+                    possible_position = (x, y)
+                    possible_move.append(make_state_move(new_board, piece, possible_position))
+                    break
+        
+        # l/l
+        x,y = piece_position
+        if new_board.board[y - 1][(x - 1) if y % 2 == 1 else x] != []:
+            y -= 1
+            if y % 2 == 1: x -= 1
+            while True:
+                y -= 1
+                if y % 2 == 1:
+                    x -= 1
+                if new_board.board[y][x] == []:
+                    possible_position = (x, y)
+                    possible_move.append(make_state_move(new_board, piece, possible_position))
+                    break
+        
+        # l/r
+        x,y = piece_position
+        if new_board.board[y - 1][(x + 1) if y % 2 == 1 else x] != []:
+            y -= 1
+            if y % 2 == 1: x += 1
+            while True:
+                y -= 1
+                if y % 2 == 1:
+                    x += 1
+                if new_board.board[y][x] == []:
+                    possible_position = (x, y)
+                    possible_move.append(make_state_move(new_board, piece, possible_position))
+                    break
+        
+        # r/l
+        x,y = piece_position
+        if new_board.board[y + 1][(x - 1) if y % 2 == 0 else x] != []:
+            y += 1
+            if y % 2 == 0: x -= 1
+            while True:
+                y += 1
+                if y % 2 == 0:
+                    x -= 1
+                if new_board.board[y][x] == []:
+                    possible_position = (x, y)
+                    possible_move.append(make_state_move(new_board, piece, possible_position))
+                    break
+        
+        # r/r
+        x,y = piece_position
+        if new_board.board[y + 1][(x + 1) if y % 2 == 0 else x] != []:
+            y += 1
+            if y % 2 == 0: x += 1
+            while True:
+                y += 1
+                if y % 2 == 0:
+                    x += 1
+                if new_board.board[y][x] == []:
+                    possible_position = (x, y)
+                    possible_move.append(make_state_move(new_board, piece, possible_position))
+                    break
+        
+        return len(possible_move)
+    
+def active_ants(node, color):
+    possibles = 0
+    for piece in node.board.pieces:
+        if piece[0] != color or piece[1] != "A":
+            continue
+        
+        if check_continuity(node.board, node.board.pieces[piece]):
+            possibles += 1
+            
+    return possibles
+        
+
+
