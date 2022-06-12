@@ -1,6 +1,5 @@
 import copy
-
-
+from view import print_board
 def around(position):
     """" return six point around the position as a list """
     x, y = position
@@ -77,7 +76,7 @@ def check_continuity(board, position):
     return False
 
 
-def traverse(position, board):
+def traverse(position, board, first=False):
     arounds = around(position)
     for neighbour in arounds:
         x, y = neighbour
@@ -87,7 +86,8 @@ def traverse(position, board):
             for piece in pieces:
                 del board.pieces[piece]
             traverse(neighbour, board)
-            break
+            if first:
+                break
 
 
 def ant_move(des_position, position, board, piece):

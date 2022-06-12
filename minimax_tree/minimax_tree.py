@@ -103,6 +103,7 @@ def possible_state(node, color):
         for row in node.board.board:
             print(row)
         print(x)
+        print_board(node.board.board)
         for row in node.parent.board.board:
             print(row)
         print()
@@ -264,7 +265,7 @@ def possible_movement(node, color):
                         possible_move.append(make_state_move(new_board, piece, possible_position))
                         break
 
-        return possible_move
+    return possible_move
 
 
 def possible_insert(node, color):
