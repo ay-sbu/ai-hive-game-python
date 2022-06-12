@@ -68,6 +68,42 @@ class GameController:
             self.turn += 1
             print_board(self.b.board)
 
+
+
+
+            ############    manual game       #########################
+
+            # self.print_menu()
+            #
+            # command = input()
+            #
+            # if command == "break":
+            #     self.good_bye()
+            #
+            # if not self.check_command_format(command):
+            #     continue
+            #
+            # commands = command.split(" ")
+            #
+            # if self.turn == 6 and not "wQ1" in self.b.pieces and not commands[0][1] == "Q":
+            #     print("queen must entered in game before 5th turn")
+            #     continue
+            #
+            # massage = self.b.read_command(commands[0], commands[1], commands[2])
+            # if not massage == "ok":
+            #     print(massage)
+            #     continue
+            #
+            # self.turn += 1
+            #
+            # print_board(self.b.board)
+            #
+            # if self.b.end_game():
+            #     break
+
+
+            ########################################################
+
     def ai_turn(self, color="b"):
 
         print("\n------- HiveGame ------- ")
