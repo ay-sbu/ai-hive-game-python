@@ -80,14 +80,17 @@ def traverse(position, board, first=False):
     arounds = around(position)
     for neighbour in arounds:
         x, y = neighbour
-        pieces = board.board[y][x]
-        board.board[y][x] = []
-        if not pieces == []:
-            for piece in pieces:
-                del board.pieces[piece]
-            traverse(neighbour, board)
-            if first:
-                break
+        try:
+            pieces = board.board[y][x]
+            board.board[y][x] = []
+            if not pieces == []:
+                for piece in pieces:
+                    del board.pieces[piece]
+                traverse(neighbour, board)
+                if first:
+                    break
+        except:
+            pass
 
 
 def ant_move(des_position, position, board, piece):
