@@ -27,7 +27,7 @@ class GameController:
             # first command input
             command = None
             while True:
-                self.print_menu()
+                print_menu(self.turn)
                 command = input()
                 if check_first_command_format(command):
                     break
@@ -75,7 +75,7 @@ class GameController:
             # first command input
             command = None
             while True:
-                self.print_menu()
+                print_menu(self.turn)
                 command = input()
                 if check_first_command_format(command):
                     break
