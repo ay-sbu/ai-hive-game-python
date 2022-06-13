@@ -1,6 +1,7 @@
 from minimax_tree.minimax_tree import MinimaxTree
 from view import print_board
 from model.board import Board
+from contoller.command import starting_menu,choosing_player, print_menu, check_command_format, check_first_command_format
 
 
 class GameController:
@@ -8,187 +9,185 @@ class GameController:
     b = Board()
 
     def __init__(self):
+        self.type_of_game = None
         self.minimax = None
 
     def start(self):
+        self.type_of_game = starting_menu()
+        if self.type_of_game == "Single player":
+            self.Single_player()
+        elif self.type_of_game == "Multiplayer":
+            self.Multiplayer()
 
-        # first command input
-        self.print_menu()
-        command = input()
+    def Single_player(self):
+        self.turn = 0
+        player = choosing_player()
 
-        if command == "break":
-            self.good_bye()
+        if player == "White":
+            # first command input
+            command = None
+            while True:
+                self.print_menu()
+                command = input()
+                if check_first_command_format(command):
+                    break
 
-        if not self.check_first_command_format(command):
-            self.good_bye()
+            command.strip()
+            self.b.insert_piece(command, (0, 0), True, True)
+            self.turn += 1
+            print_board(self.b.board)
+            self.minimax = MinimaxTree(self.b)
+
+            # Game Loop
+            while True:
+                if self.turn % 2 == 0:
+                    print_menu(self.turn)
+                    command = input()
+                    if command == "break":
+                        self.good_bye()
+
+                    if not check_command_format(command):
+                        continue
+
+                    commands = command.split(" ")
+
+                    if self.turn == 6 and not "wQ1" in self.b.pieces and not commands[0][1] == "Q":
+                        print("queen must entered in game before 5th turn")
+                        continue
+
+                    massage = self.b.read_command(commands[0], commands[1], commands[2])
+                    if not massage == "ok":
+                        print("\n\tError : " + massage)
+                        continue
+
+                    self.minimax.update_root(self.b)
+
+                else:
+                    self.ai_turn("black")
+
+                if self.b.end_game():
+                    return self.play_again()
+
+                self.turn += 1
+                print_board(self.b.board)
+
+        else:
+            # first command input
+            command = None
+            while True:
+                self.print_menu()
+                command = input()
+                if check_first_command_format(command):
+                    break
+
+            command.strip()
+            self.b.insert_piece(command, (0, 0), True, True)
+            self.turn += 1
+            print_board(self.b.board)
+            self.minimax = MinimaxTree(self.b)
+
+            # Game Loop
+            while True:
+                if self.turn % 2 == 0:
+                    print_menu(self.turn)
+                    command = input()
+                    if command == "break":
+                        self.good_bye()
+
+                    if not check_command_format(command):
+                        continue
+
+                    commands = command.split(" ")
+
+                    if self.turn == 6 and not "wQ1" in self.b.pieces and not commands[0][1] == "Q":
+                        print("queen must entered in game before 5th turn")
+                        continue
+
+                    massage = self.b.read_command(commands[0], commands[1], commands[2])
+                    if not massage == "ok":
+                        print("\n\tError : " + massage)
+                        continue
+
+                    self.minimax.update_root(self.b)
+
+                else:
+                    self.ai_turn("black")
+
+                if self.b.end_game():
+                    return self.play_again()
+
+                self.turn += 1
+                print_board(self.b.board)
+
+    def Multiplayer(self):
+        self.turn = 0
+
+
+        while True:
+            print_menu(self.turn)
+            command = input()
+            if check_first_command_format(command):
+                break
 
         command.strip()
         self.b.insert_piece(command, (0, 0), True, True)
 
-        if self.turn == 1:
-            self.turn = 0
-        else:
-            self.turn = 1
+        self.turn += 1
 
         print_board(self.b.board)
 
-        self.minimax = MinimaxTree(self.b)
-
         # Game Loop
         while True:
+            print_menu(self.turn)
+            command = input()
 
-            if self.turn % 2 == 0:
-                self.print_menu()
+            if command == "break":
+                self.good_bye()
 
-                command = input()
+            if not check_command_format(command):
+                continue
 
-                if command == "break":
-                    self.good_bye()
+            commands = command.split(" ")
 
-                if not self.check_command_format(command):
-                    continue
+            if self.turn == 6 and not "wQ1" in self.b.pieces and not commands[0][1] == "Q":
+                print("queen must entered in game before 5th turn")
+                continue
 
-                commands = command.split(" ")
+            if self.turn == 7 and not "bQ1" in self.b.pieces and not commands[0][1] == "Q":
+                print("queen must entered in game before 5th turn")
+                continue
 
-                if self.turn == 6 and not "wQ1" in self.b.pieces and not commands[0][1] == "Q":
-                    print("queen must entered in game before 5th turn")
-                    continue
-
-                massage = self.b.read_command(commands[0], commands[1], commands[2])
-                if not massage == "ok":
-                    continue
-                if self.b.end_game():
-                    break
-
-                self.minimax.update_root(self.b)
-
-            else:
-                self.ai_turn()
+            massage = self.b.read_command(commands[0], commands[1], commands[2])
+            if not massage == "ok":
+                print("\n\tError : " + massage)
+                continue
+            if self.b.end_game():
+                return self.play_again()
 
             self.turn += 1
             print_board(self.b.board)
 
-
-
-
-            ############    manual game       #########################
-
-            # self.print_menu()
-            #
-            # command = input()
-            #
-            # if command == "break":
-            #     self.good_bye()
-            #
-            # if not self.check_command_format(command):
-            #     continue
-            #
-            # commands = command.split(" ")
-            #
-            # if self.turn == 6 and not "wQ1" in self.b.pieces and not commands[0][1] == "Q":
-            #     print("queen must entered in game before 5th turn")
-            #     continue
-            #
-            # massage = self.b.read_command(commands[0], commands[1], commands[2])
-            # if not massage == "ok":
-            #     print(massage)
-            #     continue
-            #
-            # self.turn += 1
-            #
-            # print_board(self.b.board)
-            #
-            # if self.b.end_game():
-            #     break
-
-
-            ########################################################
-
-    def ai_turn(self, color="b"):
-
+    def ai_turn(self, color):
         print("\n------- HiveGame ------- ")
         print("$ turn : ", end='')
-        print("white") if color == "w" else print("black")
+        print(color)
         print("$ AI : ")
 
         self.b = self.minimax.give_next_state()
 
-    def print_menu(self):
-        print("\n")
-        print("------- HiveGame ------- ")
-        print("$ turn : ", end='')
-        if self.turn % 2 == 0:
-            print("white")
+
+    def play_again(self):
+        print("\n\tDo you want play again ?")
+        print("\t\t1) Yes")
+        print("\t\t2) No")
+        result = input("\t\t...")
+        if result == "1":
+            self.start()
         else:
-            print("black")
+            self.good_bye()
 
-        print("$ input your command > ", end='')
-
-    def check_command_format(self, command):
-        commands = command.split()
-        if len(commands) != 3 or not self.check_node_format(commands[0]) or \
-                not self.check_place_format(commands[1]) or not self.check_node_format(commands[2]) or \
-                self.bad_turn(commands[0][0]):
-            print("bad input format!")
-            return False
-
-        return True
-
-    def check_first_command_format(self, command):
-        commands = command.split()
-        if len(commands) != 1 or not self.check_node_format(command) or self.bad_turn(command[0]):
-            print("bad input format!")
-            return False
-        return True
-
-    def bad_turn(self, color):
-        if self.turn % 2 == 0 and color == 'b':
-            return True
-
-        if self.turn % 2 == 1 and color == 'w':
-            return True
-
-        return False
 
     @staticmethod
     def good_bye():
         print("Good Bye!")
         exit()
-
-    @staticmethod
-    def check_place_format(string_place):
-        if string_place == 'up' or \
-                string_place == 'w' or \
-                string_place == 'nw' or \
-                string_place == 'ne' or \
-                string_place == 'e' or \
-                string_place == 'se' or \
-                string_place == 'sw':
-            return True
-        return False
-
-    @staticmethod
-    def check_node_format(string_node):
-        if (string_node[0] != 'w' and string_node[0] != 'b') or len(string_node) != 3:
-            return False
-
-        if string_node[1] != 'B' and \
-                string_node[1] != 'Q' and \
-                string_node[1] != 'L' and \
-                string_node[1] != 'S' and \
-                string_node[1] != 'A':
-            return False
-
-        if string_node[1] == 'L' and string_node[1] == 'A':
-            if int(string_node[2]) > 3:
-                return False
-
-        if string_node[1] == 'S' and string_node[1] == 'B':
-            if int(string_node[2]) > 2:
-                return False
-
-        if string_node[1] == 'Q':
-            if int(string_node[2]) > 1:
-                return False
-
-        return True
