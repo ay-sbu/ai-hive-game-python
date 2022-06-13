@@ -43,11 +43,12 @@ class Board(object):
     def resize_page(self, x, y):
         if y == 0:
             self.add_row(True)
-        elif x == len(self.board[0]) - 1:
+            self.add_row(True)
+        elif y == len(self.board) - 1:
             self.add_row()
         if x == 0:
             self.add_column(True)
-        else:
+        elif x == len(self.board[0]) - 1:
             self.add_column()
 
     def resize(self, position):
@@ -138,7 +139,7 @@ class Board(object):
         xx, yy = self.pieces.get(piece)
 
         position = self.give_position(direction, ref_piece)
-        x, y = self.resize(position)
+        x, y = position
         if can_move(piece, (x, y), self):
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)
@@ -150,11 +151,11 @@ class Board(object):
     def insert_piece(self, piece, position, around=False, manual=False):
         if not around and not manual:
             message = self.possible_insert(piece, position)
-            if not message == "ok":  # and not self.initial_turn
+            if not message == "ok" and not self.initial_turn:
                 return message
             self.initial_turn = False
         message = "ok"
-        x, y = self.resize(position)
+        x, y = position
         if self.board[y][x] == []:
             self.board[y][x] = self.board[y][x] + [piece]
             self.pieces[piece] = (x, y)

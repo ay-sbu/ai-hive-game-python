@@ -1,6 +1,5 @@
 import copy
-
-
+from view import print_board
 def around(position):
     """" return six point around the position as a list """
     x, y = position
@@ -41,7 +40,7 @@ def initial_condition_for_move(piece, board):
 
 
 
-def can_move(piece, des_position, board, continuity=False):
+def can_move(piece, des_position, board, continuity=True):
     """ check that movement is possible based on piece role """
     # it can be 'A', 'B', 'L', 'Q', 'S'
     piece_role = piece[1]
@@ -77,22 +76,21 @@ def check_continuity(board, position):
     return False
 
 
-def traverse(position, board):
+def traverse(position, board, first=False):
     arounds = around(position)
     for neighbour in arounds:
         x, y = neighbour
-        pieces = []
-        if x < 0 or y < 0:
-            continue
         try:
             pieces = board.board[y][x]
             board.board[y][x] = []
+            if not pieces == []:
+                for piece in pieces:
+                    del board.pieces[piece]
+                traverse(neighbour, board)
+                if first:
+                    break
         except:
             pass
-        if not pieces == []:
-            for piece in pieces:
-                del board.pieces[piece]
-            traverse(neighbour, board)
 
 
 def ant_move(des_position, position, board, piece):
