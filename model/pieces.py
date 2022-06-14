@@ -70,7 +70,7 @@ def can_move(piece, des_position, board, continuity=True):
 
 def check_continuity(board, position):
     new_board = copy.deepcopy(board)
-    traverse(position, new_board)
+    traverse(position, new_board,True)
     if len(new_board.pieces) == 0:
         return True
     return False
