@@ -209,45 +209,41 @@ def queen_move(des_position, position, board, piece):
 
 
 def spider_move(des_position, position, board, piece, all_position=False):
+    result = []
     arounds = around(position)
-    first = []
     if check_surrounding(position, board, piece):
         for around_point in arounds:
             if spider_checking(around_point, board, piece):
-                first.append(around_point)
+                first = around_point
+                arounds_first = around(around_point)
+                for around_first in arounds_first:
+                    if spider_checking(around_first, board, piece) \
+                            and not around_first == position:
+                        arounds_second = around(around_first)
 
-    second = []
-    for i in first:
-        arounds = around(i)
-        for around_point in arounds:
-            if spider_checking(around_point, board, piece) \
-                    and not around_point in first and around_point[0] >= 0 \
-                    and around_point[1] >= 0 and not around_point == position:
-                second.append(around_point)
+                        for around_second in arounds_second:
+                            if spider_checking(around_second, board, piece) \
+                                    and not around_second == around_point\
+                                    and not around_second == position\
+                                    and not around_second == arounds_first:
+                                result.append(around_second)
 
-    third = []
-    for i in second:
-        arounds = around(i)
-        for around_point in arounds:
-            if spider_checking(around_point, board, piece) \
-                    and not around_point in second :
-                third.append(around_point)
-
-    return third if all_position else des_position in third
+    return result if all_position else des_position in result
 
 
 def spider_checking(des_position, board, piece):
     x, y = des_position
-    try:
-        if board.board[y][x] == []:
-            if check_surrounding(des_position, board, piece):
-                around_des = around(des_position)
-                for point in around_des:
+
+    if board.board[y][x] == []:
+        if check_surrounding(des_position, board, piece):
+            around_des = around(des_position)
+            for point in around_des:
+                try:
                     xx, yy = point
                     if not board.board[yy][xx] == []:
                         return True
-    except:
-        pass
+                except:
+                    pass
     return False
 
 

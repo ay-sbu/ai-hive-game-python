@@ -119,7 +119,7 @@ class GameController:
                 self.turn += 1
                 print_board(self.b.board)
 
-    def Multiplayer(self):
+    def Multiplayer(self):  # todo: check white-black turn
         self.turn = 0
 
 
