@@ -230,8 +230,7 @@ def spider_move(des_position, position, board, piece, all_position=False):
         arounds = around(i)
         for around_point in arounds:
             if spider_checking(around_point, board, piece) \
-                    and not around_point in second \
-                    and not around_point in first:
+                    and not around_point in second :
                 third.append(around_point)
 
     return third if all_position else des_position in third
