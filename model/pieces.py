@@ -215,17 +215,18 @@ def spider_move(des_position, position, board, piece, all_position=False):
         for around_point in arounds:
             if spider_checking(around_point, board, piece):
                 first = around_point
-                arounds_first = around(around_point)
+                arounds_first = around(first)
                 for around_first in arounds_first:
                     if spider_checking(around_first, board, piece) \
                             and not around_first == position:
                         arounds_second = around(around_first)
+                        second = arounds_first
 
                         for around_second in arounds_second:
                             if spider_checking(around_second, board, piece) \
-                                    and not around_second == around_point\
-                                    and not around_second == position\
-                                    and not around_second == arounds_first:
+                                    and not around_second == first\
+                                    and not around_second == second\
+                                    and not around_second == position:
                                 result.append(around_second)
 
     return result if all_position else des_position in result
@@ -234,16 +235,19 @@ def spider_move(des_position, position, board, piece, all_position=False):
 def spider_checking(des_position, board, piece):
     x, y = des_position
 
-    if board.board[y][x] == []:
-        if check_surrounding(des_position, board, piece):
-            around_des = around(des_position)
-            for point in around_des:
-                try:
-                    xx, yy = point
-                    if not board.board[yy][xx] == []:
-                        return True
-                except:
-                    pass
+    try:
+        if board.board[y][x] == []:
+            if check_surrounding(des_position, board, piece):
+                around_des = around(des_position)
+                for point in around_des:
+                    try:
+                        xx, yy = point
+                        if not board.board[yy][xx] == []:
+                            return True
+                    except:
+                        pass
+    except:
+        pass
     return False
 
 
@@ -275,3 +279,4 @@ def piece_naming(piece):
         return "locust"
     if piece[1] == 'A':
         return "ant"
+

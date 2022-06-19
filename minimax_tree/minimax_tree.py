@@ -12,7 +12,7 @@ MAX = -MIN
 
 
 class MinimaxTree:
-    depth_limit_checking = 3
+    depth_limit_checking = 5
 
     def __init__(self, board):
         self.root = Node(board, [], None, 0)
@@ -25,6 +25,7 @@ class MinimaxTree:
             flag = True
 
         if node.turn == self.this_turn + self.depth_limit_checking:
+            print_board(node.board.board)
             return heuristic(node)
 
         if not node.children:
@@ -116,6 +117,8 @@ def possible_state(node, color):
 
     possibles_state.extend(x)
     possibles_state.extend(possible_insert(node, color))
+
+
     return possibles_state
 
 

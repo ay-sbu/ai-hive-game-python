@@ -5,14 +5,15 @@ from contoller.command import starting_menu,choosing_player, print_menu, check_c
 
 
 class GameController:
-    turn = 0
-    b = Board()
 
     def __init__(self):
         self.type_of_game = None
         self.minimax = None
+        self.turn = 0
+        self.b = Board()
 
     def start(self):
+        self.__init__()
         self.type_of_game = starting_menu()
         if self.type_of_game == "Single player":
             self.Single_player()
