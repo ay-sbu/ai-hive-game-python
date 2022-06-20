@@ -363,8 +363,15 @@ def heuristic(node):
     p2 = white_active_ants - black_active_ants
     c2 = 50
     
-    white_in_game_ants = 3 - node.board.white_pieces["ant"]
-    black_in_game_ants = 3 - node.board.black_pieces["ant"]
+    try:
+        white_in_game_ants = 3 - node.board.white_pieces["ant"]
+    except Exception:
+        white_in_game_ants = 3
+    
+    try:
+        black_in_game_ants = 3 - node.board.black_pieces["ant"]
+    except Exception:
+        black_in_game_ants = 3
     p3 = white_in_game_ants - black_in_game_ants
     c3 = 30
     
