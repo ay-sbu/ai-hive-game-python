@@ -89,6 +89,18 @@ wL1 w bQ1
 bL1 ne bQ1
 
 
+
+SPIDER TEST:
+wA1
+bQ1 ne wA1
+wL1 se wA1
+bA1 e bQ1
+wQ1 w wA1
+bS1 nw bQ1
+wL1 nw wA1
+bS1 e bA1
+
+
 LOCUST TEST:
 wQ1
 bQ1 w wQ1

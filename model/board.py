@@ -41,14 +41,14 @@ class Board(object):
                 row.append([])
 
     def resize_page(self, x, y):
-        if y == 0:
+        if y == 0 or y == 1:
             self.add_row(True)
             self.add_row(True)
-        elif y == len(self.board) - 1:
+        elif y == len(self.board) - 1 or y == len(self.board) - 2:
             self.add_row()
-        if x == 0:
+        if x == 0 or x == 1:
             self.add_column(True)
-        elif x == len(self.board[0]) - 1:
+        elif x == len(self.board[0]) - 1 or x == len(self.board[0]) - 2:
             self.add_column()
 
     def resize(self, position):

@@ -216,17 +216,17 @@ def spider_move(des_position, position, board, piece, all_position=False):
             if spider_checking(around_point, board, piece):
                 first = around_point
                 arounds_first = around(first)
+
+                arounds_first = [number for number in arounds_first if number[0] >= 0 and number[1] >= 0]
                 for around_first in arounds_first:
                     if spider_checking(around_first, board, piece) \
                             and not around_first == position:
                         arounds_second = around(around_first)
-                        second = arounds_first
+                        second = around_first
 
+                        arounds_second = [number for number in arounds_second if number[0] >= 0 and number[1] >= 0]
                         for around_second in arounds_second:
-                            if spider_checking(around_second, board, piece) \
-                                    and not around_second == first\
-                                    and not around_second == second\
-                                    and not around_second == position:
+                            if spider_checking(around_second, board, piece) and not around_second == first and not around_second == second and not around_second == position:
                                 result.append(around_second)
 
     return result if all_position else des_position in result

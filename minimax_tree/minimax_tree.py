@@ -25,7 +25,7 @@ class MinimaxTree:
             flag = True
 
         if node.turn == self.this_turn + self.depth_limit_checking:
-            print_board(node.board.board)
+            # print_board(node.board.board)
             return heuristic(node)
 
         if not node.children:
@@ -83,7 +83,6 @@ class MinimaxTree:
 
 
 def update_last_depth(node):
-    children = []
     if node.turn % 2 == 0:
         children = possible_state(node, "b")
     else:
@@ -99,26 +98,8 @@ def update_last_depth(node):
 
 def possible_state(node, color):
     possibles_state = []
-    x = possible_movement(node, color)
-    if x == None:
-        for row in node.board.board:
-            print(row)
-        print(x)
-        print_board(node.board.board)
-        for row in node.parent.board.board:
-            print(row)
-        print()
-        for row in node.parent.parent.board.board:
-            print(row)
-        print()
-        for row in node.parent.parent.parent.board.board:
-            print(row)
-        print()
-
-    possibles_state.extend(x)
+    possibles_state.extend(possible_movement(node, color))
     possibles_state.extend(possible_insert(node, color))
-
-
     return possibles_state
 
 
@@ -203,11 +184,18 @@ def possible_movement(node, color):
                 x += 1
                 while True:
                     x += 1
-                    if new_board.board[y][x] == []:
-                        possible_position = (x, y)
-                        possible_move.append(make_state_move(new_board, piece, possible_position))
-                        break
-
+                    try:
+                        if new_board.board[y][x] == []:
+                            possible_position = (x, y)
+                            possible_move.append(make_state_move(new_board, piece, possible_position))
+                            break
+                    except:
+                        print_board(node.parent.board.board)
+                        print()
+                        print_board(node.board.board)
+                        print()
+                        print_board(new_board.board)
+                        return
             # l/l
             x, y = piece_position
             if new_board.board[y - 1][(x - 1) if y % 2 == 1 else x] != []:
@@ -248,12 +236,19 @@ def possible_movement(node, color):
                     y += 1
                     if y % 2 == 0:
                         x -= 1
-                    if new_board.board[y][x] == []:
-                        possible_position = (x, y)
-                        possible_move.append(make_state_move(new_board, piece, possible_position))
-                        break
-
-            # r/r
+                    try:
+                        if new_board.board[y][x] == []:
+                            possible_position = (x, y)
+                            possible_move.append(make_state_move(new_board, piece, possible_position))
+                            break
+                    except:
+                        print_board(node.parent.board.board)
+                        print()
+                        print_board(node.board.board)
+                        print()
+                        print_board(new_board.board)
+                        return
+                        # r/r
             x, y = piece_position
             if new_board.board[y + 1][(x + 1) if y % 2 == 0 else x] != []:
                 y += 1
@@ -290,10 +285,6 @@ def possible_insert(node, color):
         around = node.board.around(node.board.pieces[piece])
         for position in around:
             x, y = position
-            # # print(x,y)
-            # print_board(node.board.board)
-            # print(x,y)
-            # print()
             if not node.board.board[y][x] == []:
                 continue
             if node.board.possible_insert(piece, position) == "ok":
@@ -308,12 +299,14 @@ def possible_insert(node, color):
 
 
 def make_state_move(board, piece, position):
+
     state = copy.deepcopy(board)
     x, y = position
 
-    state.board[y][x] = board.board[y][x] + [piece]
+    state.board[y][x] = state.board[y][x] + [piece]
     state.pieces[piece] = (x, y)
     state.resize_page(x,y)
+
 
     return state
 
