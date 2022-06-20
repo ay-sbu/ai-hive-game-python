@@ -346,39 +346,44 @@ def make_state_insert(board, piece_name, position, color):
 
 
 def heuristic(node):
-    # if node.turn < 6:
-    #     return 1
-    # around_white_queen = around(node.board.pieces.get("wQ1"))
-    # around_black_queen = around(node.board.pieces.get("bQ1"))
-    # p1 = around_black_queen - around_white_queen
-    # c1 = 80
-    #
-    # white_active_ants = active_ants(node, 'w')
-    # black_active_ants = active_ants(node, 'b')
-    # p2 = white_active_ants - black_active_ants
-    # c2 = 50
-    #
-    # white_in_game_ants = 3 - node.board.white_pieces["ant"]
-    # black_in_game_ants = 3 - node.board.black_pieces["ant"]
-    # p3 = white_in_game_ants - black_in_game_ants
-    # c3 = 30
-    #
-    # white_locusts_possible_moves = locusts_moves(node, 'w')
-    # black_locusts_possible_moves = locusts_moves(node, 'b')
-    # p4 = white_locusts_possible_moves - black_locusts_possible_moves
-    # c4 = 20
-    #
-    # # spider is a stupid piece, so we don't consider it :)
-    #
-    # score = (c1 * p1) + (c2 * p2) + (c3 * p3) + (c4 * p4)
-    #
-    # return score
+    
+    if "wQ1" in node.board.pieces:
+        around_white_queen = len(around(node.board.pieces.get("wQ1")))
+    else:
+        around_white_queen = 0
+    if "bQ1" in node.board.pieces:
+        around_black_queen = len(around(node.board.pieces.get("bQ1")))
+    else:
+        around_black_queen = 0
+    p1 = around_black_queen - around_white_queen
+    c1 = 80
+    
+    white_active_ants = active_ants_count(node, 'w')
+    black_active_ants = active_ants_count(node, 'b')
+    p2 = white_active_ants - black_active_ants
+    c2 = 50
+    
+    white_in_game_ants = 3 - node.board.white_pieces["ant"]
+    black_in_game_ants = 3 - node.board.black_pieces["ant"]
+    p3 = white_in_game_ants - black_in_game_ants
+    c3 = 30
+    
+    white_locusts_possible_moves = locusts_moves_counts(node, 'w')
+    black_locusts_possible_moves = locusts_moves_counts(node, 'b')
+    p4 = white_locusts_possible_moves - black_locusts_possible_moves
+    c4 = 20
+    
+    # spider is a stupid piece, so we don't consider it :)
+    
+    score = (c1 * p1) + (c2 * p2) + (c3 * p3) + (c4 * p4)
+    
+    return score
 
-    return int(random() * 10)
+    # return int(random() * 10)
 
 
 # todo: I think possible_movement can be decompose to checking each piece
-def locusts_moves(node, color):
+def locusts_moves_counts(node, color):
     possible_move = []
     for piece in node.board.pieces:
         if piece[0] != color or piece[1] != "L":
@@ -472,10 +477,10 @@ def locusts_moves(node, color):
                     possible_move.append(make_state_move(new_board, piece, possible_position))
                     break
 
-        return len(possible_move)
+    return len(possible_move)
 
 
-def active_ants(node, color):
+def active_ants_count(node, color):
     possibles = 0
     for piece in node.board.pieces:
         if piece[0] != color or piece[1] != "A":
