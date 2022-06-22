@@ -142,24 +142,28 @@ def locust_move(des_position, position, board):
         x_direction = 'l'
 
     # move position to des_position Loop
-
-    if y_direction == 'no':
-
+    
+    if y_direction == 'no' and x_direction == 'r':
         while True:
             if y == des_y and x == des_x:
                 return True
             if board.board[y][x] == []:
                 return False
-            if x_direction == 'r':
-                x += 1
-                if x > des_x:
-                    return False
-            else:
-                x -= 1
-                if x < des_x:
-                    return False
-
-    elif y_direction == 'r':
+            x += 1
+            if x > des_x:
+                return False
+    
+    elif y_direction == 'no' and x_direction == 'l':
+        while True:
+            if y == des_y and x == des_x:
+                return True
+            if board.board[y][x] == []:
+                return False
+            x -= 1
+            if x < des_x:
+                return False
+            
+    elif y_direction == 'r' and x_direction == 'r':
         while True:
             if y == des_y and x == des_x:
                 return True
@@ -169,16 +173,25 @@ def locust_move(des_position, position, board):
             if y > des_y:
                 return False
             if y % 2 == 0:
-                if x_direction == 'r':
-                    x += 1
-                    if x > des_x:
-                        return False
-                else:
-                    x -= 1
-                    if x < des_x:
-                        return False
-
-    else:
+                x += 1
+                if x > des_x:
+                    return False
+                
+    elif y_direction == 'r' and x_direction == 'l':
+        while True:
+            if y == des_y and x == des_x:
+                return True
+            if board.board[y][x] == []:
+                return False
+            y += 1
+            if y > des_y:
+                return False
+            if y % 2 == 0:
+                x -= 1
+                if x < des_x:
+                    return False    
+                
+    elif y_direction == 'l' and x_direction == 'r':
         while True:
             if y == des_y and x == des_x:
                 return True
@@ -187,15 +200,27 @@ def locust_move(des_position, position, board):
             y -= 1
             if y < des_y:
                 return False
+            if y % 2 == 0:
+                x += 1
+                if x > des_x:
+                    return False
+    
+    elif y_direction == 'l' and x_direction == 'l':
+        while True:
+            if y == des_y and x == des_x:
+                return True
+            if board.board[y][x] == []:
+                return False
+            y += 1
+            if y > des_y:
+                return False
             if y % 2 == 1:
-                if x_direction == 'r':
-                    x += 1
-                    if x > des_x:
-                        return False
-                else:
-                    x -= 1
-                    if x < des_x:
-                        return False
+                x -= 1
+                if x < des_x:
+                    return False           
+    
+    else:
+        return "I think Code is not True :)"
 
 
 def queen_move(des_position, position, board, piece):

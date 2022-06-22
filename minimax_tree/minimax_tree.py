@@ -1,5 +1,5 @@
 import copy
-
+from minimax_tree.heuristic_params import HeuristicParams
 
 from view import print_board
 from random import random
@@ -356,7 +356,8 @@ def make_state_insert(board, piece_name, position, color):
 
 def heuristic(node):
     
-    if node.turn < 6 and "bQ1" in node.board.pieces:
+    if node.turn < 6 and "bQ1" in node.board.pieces and not HeuristicParams.queen_visited:
+        HeuristicParams.queen_visited = True
         return 90
     
     if "wQ1" in node.board.pieces:
@@ -400,10 +401,26 @@ def heuristic(node):
         p4 = 1
         c4 = 1
     
+    try:
+        white_in_game_spiders = 3 - node.board.white_pieces["spider"]
+    except Exception:
+        white_in_game_spiders = 3
+    
+    try:
+        black_in_game_spiders = 3 - node.board.black_pieces["spider"]
+    except Exception:
+        black_in_game_spiders = 3
+    
+    p5 = white_in_game_spiders - black_in_game_spiders
+    
+    if node.turn < 20:
+        c5 = 8
+    else:
+        c5 = 2
     
     # spider is a stupid piece, so we don't consider it :)
     
-    score = (c1 * p1) + (c2 * p2) + (c3 * p3) + (c4 * p4)
+    score = (c1 * p1) + (c2 * p2) + (c3 * p3) + (c4 * p4) + (c5 * p5)
     
     return -score
 
