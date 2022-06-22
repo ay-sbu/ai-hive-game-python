@@ -186,7 +186,7 @@ def locust_move(des_position, position, board):
             y += 1
             if y > des_y:
                 return False
-            if y % 2 == 0:
+            if y % 2 == 1:
                 x -= 1
                 if x < des_x:
                     return False    
