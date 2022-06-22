@@ -12,7 +12,7 @@ MAX = -MIN
 
 
 class MinimaxTree:
-    depth_limit_checking = 1
+    depth_limit_checking = 3
 
     def __init__(self, board):
         self.root = Node(board, [], None, 0)
@@ -356,7 +356,7 @@ def make_state_insert(board, piece_name, position, color):
 
 def heuristic(node):
     
-    if "bQ1" in node.board.pieces:
+    if node.turn < 6 and "bQ1" in node.board.pieces:
         return 90
     
     if "wQ1" in node.board.pieces:
@@ -364,8 +364,7 @@ def heuristic(node):
     else:
         around_white_queen = 0
     if "bQ1" in node.board.pieces:
-        return 100
-        # around_black_queen = len(around(node.board.pieces.get("bQ1")))
+        around_black_queen = len(around(node.board.pieces.get("bQ1")))
     else:
         around_black_queen = 0
     p1 = around_black_queen - around_white_queen
@@ -374,7 +373,11 @@ def heuristic(node):
     white_active_ants = active_ants_count(node, 'w')
     black_active_ants = active_ants_count(node, 'b')
     p2 = white_active_ants - black_active_ants
-    c2 = 5
+    
+    if node.turn > 10:
+        c2 = 8
+    else:
+        c2 = 5
     
     try:
         white_in_game_ants = 3 - node.board.white_pieces["ant"]
@@ -388,10 +391,14 @@ def heuristic(node):
     p3 = white_in_game_ants - black_in_game_ants
     c3 = 1
     
-    white_locusts_possible_moves = locusts_moves_counts(node, 'w')
-    black_locusts_possible_moves = locusts_moves_counts(node, 'b')
-    p4 = white_locusts_possible_moves - black_locusts_possible_moves
-    c4 = 2
+    if node.turn > 10:
+        white_locusts_possible_moves = locusts_moves_counts(node, 'w')
+        black_locusts_possible_moves = locusts_moves_counts(node, 'b')
+        p4 = white_locusts_possible_moves - black_locusts_possible_moves
+        c4 = 2
+    else:
+        p4 = 1
+        c4 = 1
     
     
     # spider is a stupid piece, so we don't consider it :)
