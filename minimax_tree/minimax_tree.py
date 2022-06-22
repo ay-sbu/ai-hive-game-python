@@ -35,7 +35,6 @@ class MinimaxTree:
         # for child in node.children:
         #
         #     print_board(child.board.board)
-        print("len is : " ,len(node.children))
 
         if node.turn % 2 != 0:  # maximizing player
 
@@ -379,7 +378,7 @@ def heuristic(node):
     except Exception:
         black_in_game_ants = 3
     p3 = white_in_game_ants - black_in_game_ants
-    c3 = 30
+    c3 = 1000000
     
     white_locusts_possible_moves = locusts_moves_counts(node, 'w')
     black_locusts_possible_moves = locusts_moves_counts(node, 'b')
