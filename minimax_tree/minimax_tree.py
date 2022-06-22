@@ -369,11 +369,7 @@ def heuristic(node):
     else:
         around_black_queen = 0
     p1 = around_black_queen - around_white_queen
-<<<<<<< HEAD
     c1 = 10
-=======
-    c1 = 8
->>>>>>> 7e7ce1c55583dc7879552ab9e16a4f17504dc030
     
     white_active_ants = active_ants_count(node, 'w')
     black_active_ants = active_ants_count(node, 'b')
@@ -396,10 +392,7 @@ def heuristic(node):
     black_locusts_possible_moves = locusts_moves_counts(node, 'b')
     p4 = white_locusts_possible_moves - black_locusts_possible_moves
     c4 = 2
-<<<<<<< HEAD
     
-=======
->>>>>>> 7e7ce1c55583dc7879552ab9e16a4f17504dc030
     
     # spider is a stupid piece, so we don't consider it :)
     
