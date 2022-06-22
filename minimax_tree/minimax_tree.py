@@ -12,7 +12,7 @@ MAX = -MIN
 
 
 class MinimaxTree:
-    depth_limit_checking = 2
+    depth_limit_checking = 1
 
     def __init__(self, board):
         self.root = Node(board, [], None, 0)
@@ -36,9 +36,13 @@ class MinimaxTree:
         #
         #     print_board(child.board.board)
 
+        # print("len is : ", len(node.children))
+
+
         if node.turn % 2 == 0:  # maximizing player
 
             best = MIN
+
 
             for child in node.children:
                 val = self.minimax(child, alpha, beta)
@@ -360,7 +364,8 @@ def heuristic(node):
     else:
         around_white_queen = 0
     if "bQ1" in node.board.pieces:
-        around_black_queen = len(around(node.board.pieces.get("bQ1")))
+        return 100
+        # around_black_queen = len(around(node.board.pieces.get("bQ1")))
     else:
         around_black_queen = 0
     p1 = around_black_queen - around_white_queen
@@ -381,7 +386,7 @@ def heuristic(node):
     except Exception:
         black_in_game_ants = 3
     p3 = white_in_game_ants - black_in_game_ants
-    c3 = 30
+    c3 = 1
     
     white_locusts_possible_moves = locusts_moves_counts(node, 'w')
     black_locusts_possible_moves = locusts_moves_counts(node, 'b')
