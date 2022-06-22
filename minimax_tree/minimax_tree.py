@@ -36,7 +36,7 @@ class MinimaxTree:
         #
         #     print_board(child.board.board)
 
-        if node.turn % 2 != 0:  # maximizing player
+        if node.turn % 2 == 0:  # maximizing player
 
             best = MIN
 
@@ -352,6 +352,9 @@ def make_state_insert(board, piece_name, position, color):
 
 def heuristic(node):
     
+    if "bQ1" in node.board.pieces:
+        return 90
+    
     if "wQ1" in node.board.pieces:
         around_white_queen = len(around(node.board.pieces.get("wQ1")))
     else:
@@ -361,12 +364,12 @@ def heuristic(node):
     else:
         around_black_queen = 0
     p1 = around_black_queen - around_white_queen
-    c1 = 80
+    c1 = 10
     
     white_active_ants = active_ants_count(node, 'w')
     black_active_ants = active_ants_count(node, 'b')
     p2 = white_active_ants - black_active_ants
-    c2 = 50
+    c2 = 5
     
     try:
         white_in_game_ants = 3 - node.board.white_pieces["ant"]
@@ -378,18 +381,19 @@ def heuristic(node):
     except Exception:
         black_in_game_ants = 3
     p3 = white_in_game_ants - black_in_game_ants
-    c3 = 1000000
+    c3 = 30
     
     white_locusts_possible_moves = locusts_moves_counts(node, 'w')
     black_locusts_possible_moves = locusts_moves_counts(node, 'b')
     p4 = white_locusts_possible_moves - black_locusts_possible_moves
-    c4 = 20
+    c4 = 2
+    
     
     # spider is a stupid piece, so we don't consider it :)
     
     score = (c1 * p1) + (c2 * p2) + (c3 * p3) + (c4 * p4)
     
-    return score
+    return -score
 
     # return int(random() * 10)
 
