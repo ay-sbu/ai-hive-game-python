@@ -12,7 +12,7 @@ MAX = -MIN
 
 
 class MinimaxTree:
-    depth_limit_checking = 5
+    depth_limit_checking = 2
 
     def __init__(self, board):
         self.root = Node(board, [], None, 0)
@@ -30,6 +30,12 @@ class MinimaxTree:
 
         if not node.children:
             update_last_depth(node)
+        #
+        # print("################################")
+        # for child in node.children:
+        #
+        #     print_board(child.board.board)
+        print("len is : " ,len(node.children))
 
         if node.turn % 2 != 0:  # maximizing player
 

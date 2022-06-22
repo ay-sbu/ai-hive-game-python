@@ -162,12 +162,12 @@ class Board(object):
             self.resize_page(x, y)
             piece_name = piece_naming(piece)
             if piece[0] == "b":  # todo : remove this condition from here and build function
-                if self.black_pieces[piece_name] >= 1:
+                if self.black_pieces[piece_name] > 1:
                     self.black_pieces.update({piece_name: self.black_pieces[piece_name] - 1})
                 else:
                     del self.black_pieces[piece_name]
             else:
-                if self.white_pieces[piece_name] >= 1:
+                if self.white_pieces[piece_name] > 1:
                     self.white_pieces.update({piece_name: self.white_pieces[piece_name] - 1})
                 else:
                     del self.white_pieces[piece_name]
