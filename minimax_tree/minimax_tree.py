@@ -14,7 +14,14 @@ MAX = -MIN
 class MinimaxTree:
     depth_limit_checking = 3
 
+
+
+
+
     def __init__(self, board):
+        self.first_heuristic = None
+        self.second_heuristic = None
+
         self.root = Node(board, [], None, 0)
         self.next_state = None
         self.this_turn = 0
@@ -26,7 +33,7 @@ class MinimaxTree:
 
         if node.turn == self.this_turn + self.depth_limit_checking:
             # print_board(node.board.board)
-            return heuristic(node)
+            return self.heuristic(node)
 
         if not node.children:
             update_last_depth(node)
@@ -89,6 +96,103 @@ class MinimaxTree:
                 return
 
         self.root = Node(board, [], None, self.root.turn + 1)
+
+
+
+
+    def heuristic(self, node):
+        # if node.turn % 2 == 0:  # maxplayer
+        #     c1, c2, c3 = self.first_heuristic
+        #
+        #
+        #     p1 = 11 - sum(node.board.black_pieces.values())
+        #
+        #     p2 = active_ants_count(node, 'b')
+        #
+        #     if "wQ1" in node.board.pieces:
+        #         around_white_queen = len(around(node.board.pieces.get("wQ1")))
+        #     else:
+        #         around_white_queen = 0
+        #     if "bQ1" in node.board.pieces:
+        #         around_black_queen = len(around(node.board.pieces.get("bQ1")))
+        #     else:
+        #         around_black_queen = 0
+        #     p3 = around_white_queen - around_black_queen
+        #
+        #
+        #     return (c1 * p1) + (c2 * p2) + (c3*p3)
+        #
+        # else:
+        #     c1, c2, c3 = self.second_heuristic
+        #
+        #     p1 = 11 - sum(node.board.white_pieces.values())
+        #
+        #     p2 = active_ants_count(node, 'w')
+        #
+        #     if "wQ1" in node.board.pieces:
+        #         around_white_queen = len(around(node.board.pieces.get("wQ1")))
+        #     else:
+        #         around_white_queen = 0
+        #     if "bQ1" in node.board.pieces:
+        #         around_black_queen = len(around(node.board.pieces.get("bQ1")))
+        #     else:
+        #         around_black_queen = 0
+        #     p3 = around_black_queen - around_white_queen
+        #
+        #     return (c1 * p1) + (c2 * p2) + (c3 * p3)
+
+        if node.turn < 6 and "bQ1" in node.board.pieces:
+            return 90
+
+        if "wQ1" in node.board.pieces:
+            around_white_queen = len(around(node.board.pieces.get("wQ1")))
+        else:
+            around_white_queen = 0
+        if "bQ1" in node.board.pieces:
+            around_black_queen = len(around(node.board.pieces.get("bQ1")))
+        else:
+            around_black_queen = 0
+        p1 = around_black_queen - around_white_queen
+        c1 = 10
+
+        white_active_ants = active_ants_count(node, 'w')
+        black_active_ants = active_ants_count(node, 'b')
+        p2 = white_active_ants - black_active_ants
+
+        if node.turn > 10:
+            c2 = 8
+        else:
+            c2 = 5
+
+        try:
+            white_in_game_ants = 3 - node.board.white_pieces["ant"]
+        except Exception:
+            white_in_game_ants = 3
+
+        try:
+            black_in_game_ants = 3 - node.board.black_pieces["ant"]
+        except Exception:
+            black_in_game_ants = 3
+        p3 = white_in_game_ants - black_in_game_ants
+        c3 = 1
+
+        if node.turn > 10:
+            white_locusts_possible_moves = locusts_moves_counts(node, 'w')
+            black_locusts_possible_moves = locusts_moves_counts(node, 'b')
+            p4 = white_locusts_possible_moves - black_locusts_possible_moves
+            c4 = 2
+        else:
+            p4 = 1
+            c4 = 1
+
+
+        # spider is a stupid piece, so we don't consider it :)
+
+        score = (c1 * p1) + (c2 * p2) + (c3 * p3) + (c4 * p4)
+
+        return -score
+
+        # return int(random() * 10)
 
 
 def update_last_depth(node):
@@ -354,60 +458,6 @@ def make_state_insert(board, piece_name, position, color):
     return state
 
 
-def heuristic(node):
-    
-    if node.turn < 6 and "bQ1" in node.board.pieces:
-        return 90
-    
-    if "wQ1" in node.board.pieces:
-        around_white_queen = len(around(node.board.pieces.get("wQ1")))
-    else:
-        around_white_queen = 0
-    if "bQ1" in node.board.pieces:
-        around_black_queen = len(around(node.board.pieces.get("bQ1")))
-    else:
-        around_black_queen = 0
-    p1 = around_black_queen - around_white_queen
-    c1 = 10
-    
-    white_active_ants = active_ants_count(node, 'w')
-    black_active_ants = active_ants_count(node, 'b')
-    p2 = white_active_ants - black_active_ants
-    
-    if node.turn > 10:
-        c2 = 8
-    else:
-        c2 = 5
-    
-    try:
-        white_in_game_ants = 3 - node.board.white_pieces["ant"]
-    except Exception:
-        white_in_game_ants = 3
-    
-    try:
-        black_in_game_ants = 3 - node.board.black_pieces["ant"]
-    except Exception:
-        black_in_game_ants = 3
-    p3 = white_in_game_ants - black_in_game_ants
-    c3 = 1
-    
-    if node.turn > 10:
-        white_locusts_possible_moves = locusts_moves_counts(node, 'w')
-        black_locusts_possible_moves = locusts_moves_counts(node, 'b')
-        p4 = white_locusts_possible_moves - black_locusts_possible_moves
-        c4 = 2
-    else:
-        p4 = 1
-        c4 = 1
-    
-    
-    # spider is a stupid piece, so we don't consider it :)
-    
-    score = (c1 * p1) + (c2 * p2) + (c3 * p3) + (c4 * p4)
-    
-    return -score
-
-    # return int(random() * 10)
 
 
 # todo: I think possible_movement can be decompose to checking each piece
