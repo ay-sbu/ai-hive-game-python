@@ -1,5 +1,5 @@
 import copy
-
+from minimax_tree.heuristic_params import HeuristicParams
 
 from view import print_board
 from random import random
@@ -456,9 +456,6 @@ def make_state_insert(board, piece_name, position, color):
         state.insert_piece(color + "Q1", position, True, True)
 
     return state
-
-
-
 
 # todo: I think possible_movement can be decompose to checking each piece
 def locusts_moves_counts(node, color):
